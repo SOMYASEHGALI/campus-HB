@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #6366f1;
+  --bg-dark: #0f172a;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  @apply bg-slate-900 text-slate-50 min-h-screen;
+}
+
+.glass-card {
+  @apply bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400;
+}
+
+/* Custom styles to complement Ant Design and MUI */
+.ant-btn-primary {
+  @apply bg-indigo-600 border-none shadow-lg shadow-indigo-500/30 transition-all !h-auto py-2.5 px-6 font-semibold;
+}
+
+.ant-btn-primary:hover {
+  @apply bg-indigo-500 !important;
+}
+
+.ant-input,
+.ant-input-password {
+  @apply !bg-slate-800/50 !border-white/10 !text-white !shadow-none;
+}
+
+.ant-input:hover,
+.ant-input-password:hover {
+  @apply !border-indigo-500/50;
+}
+
+.ant-input:focus,
+.ant-input-password:focus {
+  @apply !border-indigo-500;
+}
+
+/* Global Overrides for Ant Design in Dark Theme */
+.custom-table .ant-table {
+  background: transparent !important;
+  color: #94a3b8 !important;
+}
+
+.custom-table .ant-table-thead>tr>th {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: #64748b !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.custom-table .ant-table-tbody>tr>td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+  transition: all 0.3s;
+}
+
+.custom-table .ant-table-tbody>tr:hover>td {
+  background: rgba(99, 102, 241, 0.05) !important;
+}
+
+.admin-modal .ant-modal-content {
+  background: #1e293b !important;
+  border-radius: 2rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.admin-modal .ant-modal-header {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding-bottom: 20px !important;
+}
+
+.admin-modal .ant-modal-title {
+  color: white !important;
+}
+
+.admin-modal .ant-modal-close {
+  color: white !important;
+}
+
+/* Custom Tabs styling */
+.custom-tabs .ant-tabs-nav::before {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.custom-tabs .ant-tabs-tab {
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.custom-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #818cf8 !important;
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.3) !important;
+}
+
+.custom-tabs .ant-tabs-ink-bar {
+  background: #818cf8 !important;
+}
