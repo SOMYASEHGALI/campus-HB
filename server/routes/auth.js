@@ -6,9 +6,13 @@ const router = express.Router();
 
 router.post('/register', async (req, res) => {
     try {
-        const { name, email, password, collegeName } = req.body;
+        const { name, email, password, collegeName, role } = req.body;
 
-        let userRole = 'college'; // Registration is strictly for Colleges only
+        // Validate role
+        const validRoles = ['student', 'stuff', 'admin'];
+        if (!validRoles.includes(role)) {
+            return res.status(400).json({ message: 'Invalid role' });
+        }
 
         let user = await User.findOne({ email });
         if (user) return res.status(400).json({ message: 'User already exists' });
@@ -21,7 +25,7 @@ router.post('/register', async (req, res) => {
             email,
             password: hashedPassword,
             collegeName,
-            role: userRole
+            role
         });
 
         await user.save();
