@@ -18,9 +18,9 @@ router.get('/colleges', auth, async (req, res) => {
 router.get('/', auth, async (req, res) => {
     try {
         let query = {};
-        const user = await User.findOne({_id : req.user.id});
+        const user = await User.findOne({ _id: req.user.id });
         console.log(user);
-        if (req.user.role === 'student') {
+        if (req.user.role === 'student' || req.user.role === 'staff') {
             query.allowedColleges = user.collegeName;
             console.log(query);
         }
@@ -67,11 +67,22 @@ router.get('/:id', auth, async (req, res) => {
 
         // Check if user is allowed to view this job
         const user = await User.findById(req.user.id);
-        if (req.user.role === 'student' && !job.allowedColleges.includes(user.collegeName)) {
+        if ((req.user.role === 'student' || req.user.role === 'staff') && !job.allowedColleges.includes(user.collegeName)) {
             return res.status(403).json({ message: 'You are not allowed to view this job' });
         }
 
         res.json(job);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete a job (only for admins)
+router.delete('/:id', auth, admin, async (req, res) => {
+    try {
+        const job = await Job.findByIdAndDelete(req.params.id);
+        if (!job) return res.status(404).json({ message: 'Job not found' });
+        res.json({ message: 'Job deleted successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

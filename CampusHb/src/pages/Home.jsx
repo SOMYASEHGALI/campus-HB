@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Card, Button, Tag, Typography, Skeleton, Empty, Badge } from 'antd';
+import { Card, Button, Tag, Typography, Skeleton, Empty, Badge, Modal, Input, message } from 'antd';
 import { EnvironmentOutlined, DollarOutlined, ExperimentOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 
@@ -76,8 +76,25 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 py-12">
             <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                 <div>
-                    <Title level={2} className="!text-white !m-0 !font-bold">Active Opportunities</Title>
-                    <Text className="text-slate-400">Welcome back! Manage and track student applications across {jobs.length} live openings.</Text>
+                    <div className="flex items-center gap-3 mb-2">
+                        <Title level={2} className="!text-white !m-0 !font-bold">Active Opportunities</Title>
+                        <Tag color={user.role === 'admin' ? 'red' : user.role === 'staff' ? 'gold' : 'blue'} className="capitalize !rounded-full px-4 !m-0 !py-1 font-bold">
+                            {user.role} Dashboard
+                        </Tag>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-3">
+                            <Text className="text-slate-400 text-lg">Welcome back,</Text>
+                            <span className="text-white font-black text-xl tracking-tight">{user.name}</span>
+                            <span className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                {user.role}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                            <Text className="text-slate-500 font-medium">Verified Official of: <span className="text-slate-200 font-bold italic underline decoration-indigo-500/50">{user.collegeName || 'HiringBazar Headquarters'}</span></Text>
+                        </div>
+                    </div>
                 </div>
                 <div className="flex gap-4">
                     <Badge count={jobs.length} color="#6366f1" offset={[0, 0]}>
@@ -85,6 +102,8 @@ const Home = () => {
                     </Badge>
                 </div>
             </div>
+
+
 
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -151,7 +170,7 @@ const Home = () => {
                                         icon={<ArrowRightOutlined />}
                                         className="!h-12 !rounded-xl group-hover:scale-[1.02] transition-transform"
                                     >
-                                        Manage Applications
+                                        {user.role === 'staff' ? 'Submit Bulk Data' : 'Manage Applications'}
                                     </Button>
                                 </Link>
                             </Card>

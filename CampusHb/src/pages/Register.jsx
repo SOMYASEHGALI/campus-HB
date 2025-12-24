@@ -73,6 +73,17 @@ const Register = () => {
                         </Form.Item>
 
                         <Form.Item
+                            name="role"
+                            label={<span className="text-slate-300 font-medium">I am a...</span>}
+                            rules={[{ required: true, message: 'Please select your role' }]}
+                        >
+                            <Select className="!h-12 !rounded-xl" placeholder="Select your role">
+                                <Option value="student">Student</Option>
+                                <Option value="staff">College Staff / TPO</Option>
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item
                             name="password"
                             label={<span className="text-slate-300 font-medium">Password</span>}
                             rules={[{ required: true, min: 6 }]}

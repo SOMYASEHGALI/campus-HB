@@ -8,6 +8,8 @@ const applicationSchema = new mongoose.Schema({
     phone: { type: String, required: true },
     rollNumber: { type: String },
     resumeUrl: { type: String },
+    isBulk: { type: Boolean, default: false },
+    uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     appliedAt: { type: Date, default: Date.now }
 });
 

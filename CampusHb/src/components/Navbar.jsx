@@ -48,9 +48,16 @@ const Navbar = () => {
                             )}
                             <Dropdown menu={{ items }} placement="bottomRight" arrow>
                                 <Space className="cursor-pointer group">
-                                    <div className="text-right hidden sm:block">
-                                        <p className="text-sm font-semibold text-slate-200 leading-none">{user.name}</p>
-                                        <p className="text-xs text-slate-400 capitalize">{user.role}</p>
+                                    <div className="text-right hidden sm:flex flex-col items-end">
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-sm font-bold text-slate-200 leading-none m-0">{user.name}</p>
+                                            <span className="text-[9px] bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full border border-indigo-500/30 font-black uppercase tracking-tighter">
+                                                {user.role}
+                                            </span>
+                                        </div>
+                                        <p className="text-[10px] text-slate-400 font-medium mt-1 uppercase tracking-wider truncate max-w-[180px]">
+                                            {user.collegeName || 'System HQ'}
+                                        </p>
                                     </div>
                                     <Avatar
                                         style={{ backgroundColor: '#6366f1' }}
