@@ -73,19 +73,27 @@ const AdminDashboard = () => {
     };
 
     const handleDeleteJob = async (jobId) => {
-        if (!window.confirm('Are you sure you want to delete this job opening? This will also remove any associations.')) return;
-
-        try {
-            const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5000/api/jobs/${jobId}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            message.success('Job opening deleted successfully');
-            fetchJobs();
-            fetchStats();
-        } catch (err) {
-            message.error('Failed to delete job');
-        }
+        Modal.confirm({
+            title: 'Delete Job Opening?',
+            content: 'Are you sure you want to delete this job opening? This will permanently remove the opening and all associated candidate applications from the system.',
+            okText: 'Delete Permanently',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            centered: true,
+            onOk: async () => {
+                try {
+                    const token = localStorage.getItem('token');
+                    await axios.delete(`http://localhost:5000/api/jobs/${jobId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    message.success('Job and associations deleted successfully');
+                    fetchJobs();
+                    fetchStats();
+                } catch (err) {
+                    message.error(err.response?.data?.message || 'Failed to delete job');
+                }
+            }
+        });
     };
 
     const handleExport = (jobId) => {
@@ -96,6 +104,15 @@ const AdminDashboard = () => {
     const handleExportAll = () => {
         const token = localStorage.getItem('token');
         window.open(`http://localhost:5000/api/applications/export-all?token=${token}`, '_blank');
+    };
+
+    const handleExportByCollege = (collegeName) => {
+        if (!collegeName || collegeName === 'all') {
+            handleExportAll();
+            return;
+        }
+        const token = localStorage.getItem('token');
+        window.open(`http://localhost:5000/api/applications/export-by-college/${encodeURIComponent(collegeName)}?token=${token}`, '_blank');
     };
 
     const getFullUrl = (url) => {
@@ -198,6 +215,21 @@ const AdminDashboard = () => {
                     <Tag color="cyan" className="!px-4 !rounded-lg">{count} Bulk</Tag>
                     {count > 0 && <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Active staff feed</span>}
                 </div>
+            )
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Tooltip title={`Export ${record.name} Applications`}>
+                    <Button
+                        icon={<DownloadOutlined />}
+                        onClick={() => handleExportByCollege(record.name)}
+                        className="!bg-emerald-600/20 !text-emerald-400 !border-emerald-500/30 hover:!bg-emerald-600 hover:!text-white transition-all rounded-lg"
+                    >
+                        Export Excel
+                    </Button>
+                </Tooltip>
             )
         }
     ];
@@ -454,9 +486,9 @@ const AdminDashboard = () => {
                                                 <Title level={4} className="!text-white !m-0">Institutional Audit</Title>
                                                 <Text className="text-slate-500">Filter bulk transmissions by college or organization</Text>
                                             </div>
-                                            <div className="w-full md:w-80">
+                                            <div className="w-full md:w-[450px] flex gap-3">
                                                 <Select
-                                                    className="w-full !h-12 custom-select-dark"
+                                                    className="flex-1 !h-12 custom-select-dark"
                                                     placeholder="Select Organization"
                                                     defaultValue="all"
                                                     onChange={(value) => setBulkFilter(value)}
@@ -468,6 +500,13 @@ const AdminDashboard = () => {
                                                         </Select.Option>
                                                     ))}
                                                 </Select>
+                                                <Button
+                                                    icon={<DownloadOutlined />}
+                                                    className="!h-12 px-6 !rounded-xl !bg-indigo-600 !text-white !border-none font-bold hover:!bg-indigo-500 transition-all flex items-center gap-2"
+                                                    onClick={() => handleExportByCollege(bulkFilter)}
+                                                >
+                                                    {bulkFilter === 'all' ? 'Export All' : 'Export Organization'}
+                                                </Button>
                                             </div>
                                         </div>
                                         <Table

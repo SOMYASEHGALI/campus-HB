@@ -1,7 +1,7 @@
 const express = require('express');
 const Application = require('../models/Application');
 const Job = require('../models/Job');
-const { auth } = require('../middleware/authMiddleware');
+const { auth, admin } = require('../middleware/authMiddleware');
 const { Parser } = require('json2csv');
 const { uploadToCloudinary } = require('../services/cloudinaryService');
 const upload = require('../config/multer');
@@ -15,8 +15,12 @@ const router = express.Router();
 router.post('/submit', auth, upload.single('resume'), async (req, res) => {
     try {
         const { jobId, studentName, email, phone, rollNumber, resumeUrl } = req.body;
-        if (!jobId || !studentName || !email || !phone || !rollNumber || !resumeUrl) {
-            return res.status(400).json({ message: "All Field Required" });
+        if (!jobId || !studentName || !email || !phone || !rollNumber) {
+            return res.status(400).json({ message: "Required fields missing" });
+        }
+
+        if (!resumeUrl && !req.file) {
+            return res.status(400).json({ message: "Please provide either a resume link or upload a CV file" });
         }
 
         // Check if user is student
@@ -197,12 +201,8 @@ router.get('/admin/stats', auth, async (req, res) => {
 });
 
 // Export all applications to CSV
-router.get('/export-all', auth, async (req, res) => {
+router.get('/export-all', auth, admin, async (req, res) => {
     try {
-        if (req.user.role !== 'admin') {
-            return res.status(403).json({ message: 'Access denied' });
-        }
-
         const applications = await Application.find()
             .populate('jobId', 'title company')
             .populate('studentId', 'name collegeName');
@@ -224,6 +224,55 @@ router.get('/export-all', auth, async (req, res) => {
 
         res.header('Content-Type', 'text/csv');
         res.attachment(`all_applications_export.csv`);
+        return res.send(csv);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Export applications by organization
+router.get('/export-by-college/:collegeName', auth, admin, async (req, res) => {
+    try {
+        const collegeName = req.params.collegeName;
+
+        // Find students from this college
+        const students = await User.find({ collegeName }).select('_id');
+        const studentIds = students.map(s => s._id);
+
+        const applications = await Application.find({
+            $or: [
+                { studentId: { $in: studentIds } },
+                { uploadedBy: { $in: studentIds } }
+            ]
+        })
+            .populate('jobId', 'title company')
+            .populate('studentId', 'name collegeName')
+            .populate('uploadedBy', 'name collegeName');
+
+        // Final filter to ensure we only get applications for this exact college
+        const filteredApps = applications.filter(app => {
+            const studentCollege = app.studentId?.collegeName;
+            const staffCollege = app.uploadedBy?.collegeName;
+            return studentCollege === collegeName || staffCollege === collegeName;
+        });
+
+        const fields = [
+            { label: 'Student Name', value: 'studentName' },
+            { label: 'Email', value: 'email' },
+            { label: 'Phone', value: 'phone' },
+            { label: 'Roll Number', value: 'rollNumber' },
+            { label: 'Source College', value: collegeName },
+            { label: 'Job Title', value: 'jobId.title' },
+            { label: 'Company', value: 'jobId.company' },
+            { label: 'Applied At', value: 'appliedAt' }
+        ];
+
+        const opts = { fields };
+        const parser = new Parser(opts);
+        const csv = parser.parse(filteredApps);
+
+        res.header('Content-Type', 'text/csv');
+        res.attachment(`${collegeName.replace(/\s+/g, '_')}_applications.csv`);
         return res.send(csv);
     } catch (err) {
         res.status(500).json({ error: err.message });

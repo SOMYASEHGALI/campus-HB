@@ -1,6 +1,7 @@
 const express = require('express');
 const Job = require('../models/Job');
 const User = require('../models/User');
+const Application = require('../models/Application');
 const { auth, admin } = require('../middleware/authMiddleware');
 const router = express.Router();
 
@@ -80,10 +81,17 @@ router.get('/:id', auth, async (req, res) => {
 // Delete a job (only for admins)
 router.delete('/:id', auth, admin, async (req, res) => {
     try {
-        const job = await Job.findByIdAndDelete(req.params.id);
+        const jobId = req.params.id;
+        const job = await Job.findByIdAndDelete(jobId);
         if (!job) return res.status(404).json({ message: 'Job not found' });
-        res.json({ message: 'Job deleted successfully' });
+
+        // Clean up associated applications
+        const result = await Application.deleteMany({ jobId: jobId });
+        console.log(`[Admin Audit] Deleted job ${jobId} and ${result.deletedCount} associated applications`);
+
+        res.json({ message: 'Job and all associated candidate data removed successfully' });
     } catch (err) {
+        console.error('Delete Job Error:', err);
         res.status(500).json({ error: err.message });
     }
 });

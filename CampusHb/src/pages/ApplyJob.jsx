@@ -23,6 +23,8 @@ const ApplyJob = () => {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [uploadQueue, setUploadQueue] = useState([]);
     const [currentFileIndex, setCurrentFileIndex] = useState(-1);
+    const [submissionType, setSubmissionType] = useState('link'); // 'link' or 'file'
+    const [cvFile, setCvFile] = useState(null);
     const user = JSON.parse(localStorage.getItem('user'));
 
     const sheetInputRef = React.useRef(null);
@@ -47,19 +49,40 @@ const ApplyJob = () => {
     };
 
     const onFinish = async (values) => {
+        if (submissionType === 'file' && !cvFile) {
+            return message.error('Please upload your CV file');
+        }
+        if (submissionType === 'link' && !values.resumeUrl) {
+            return message.error('Please provide your resume link');
+        }
+
         setSubmitting(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:5000/api/applications/submit', {
-                ...values,
-                jobId: id
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
+            const formData = new FormData();
+            formData.append('jobId', id);
+            formData.append('studentName', values.studentName);
+            formData.append('email', values.email);
+            formData.append('phone', values.phone);
+            formData.append('rollNumber', values.rollNumber || '');
+
+            if (submissionType === 'link' && values.resumeUrl) {
+                formData.append('resumeUrl', values.resumeUrl);
+            } else if (submissionType === 'file' && cvFile) {
+                formData.append('resume', cvFile);
+            }
+
+            await axios.post('http://localhost:5000/api/applications/submit', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
             });
             message.success('Student application submitted successfully!');
             form.resetFields();
+            setCvFile(null);
         } catch (err) {
-            message.error('Submission failed');
+            message.error(err.response?.data?.message || 'Submission failed');
         } finally {
             setSubmitting(false);
         }
@@ -436,14 +459,63 @@ const ApplyJob = () => {
                                         </Form.Item>
                                     </div>
 
-                                    <Form.Item
-                                        name="resumeUrl"
-                                        label={<span className="text-slate-300 font-bold">Verified Portfolio/Resume Link</span>}
-                                        rules={[{ required: true, type: 'url', message: 'Please enter a valid URL' }]}
-                                        extra={<Text className="text-slate-500 text-xs italic">Ensure link permissions are set to "Anyone with the link can view"</Text>}
-                                    >
-                                        <Input prefix={<LinkOutlined className="text-indigo-500 mr-2" />} placeholder="https://drive.google.com/your-resume-link" className="!h-14 !rounded-2xl !border-indigo-500/30" />
-                                    </Form.Item>
+                                    <div className="mb-8">
+                                        <div className="flex gap-4 mb-6 p-1 bg-slate-900/50 rounded-2xl border border-white/5 w-fit">
+                                            <button
+                                                type="button"
+                                                onClick={() => setSubmissionType('link')}
+                                                className={`px-6 py-2 rounded-xl transition-all font-bold text-sm ${submissionType === 'link' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                                            >
+                                                Drive Link
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setSubmissionType('file')}
+                                                className={`px-6 py-2 rounded-xl transition-all font-bold text-sm ${submissionType === 'file' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                                            >
+                                                Upload PDF/CV
+                                            </button>
+                                        </div>
+
+                                        {submissionType === 'link' ? (
+                                            <Form.Item
+                                                name="resumeUrl"
+                                                label={<span className="text-slate-300 font-bold">Verified Portfolio/Resume Link</span>}
+                                                rules={[{ required: submissionType === 'link', type: 'url', message: 'Please enter a valid URL' }]}
+                                                extra={<Text className="text-slate-500 text-xs italic">Ensure link permissions are set to "Anyone with the link can view"</Text>}
+                                            >
+                                                <Input prefix={<LinkOutlined className="text-indigo-500 mr-2" />} placeholder="https://drive.google.com/your-resume-link" className="!h-14 !rounded-2xl !border-indigo-500/30" />
+                                            </Form.Item>
+                                        ) : (
+                                            <div className="space-y-4">
+                                                <Text className="text-slate-300 font-bold block mb-2">Upload Professional CV (PDF Only)</Text>
+                                                <div
+                                                    onClick={() => !cvFile && resumeInputRef.current?.click()}
+                                                    className={`h-32 border-2 border-dashed rounded-[2rem] flex flex-col items-center justify-center transition-all cursor-pointer ${cvFile ? 'border-green-500/30 bg-green-500/5' : 'border-white/10 hover:border-indigo-500/30 bg-slate-900/30'}`}
+                                                >
+                                                    <input
+                                                        type="file"
+                                                        ref={resumeInputRef}
+                                                        className="hidden"
+                                                        accept=".pdf,.doc,.docx"
+                                                        onChange={(e) => setCvFile(e.target.files[0])}
+                                                    />
+                                                    {cvFile ? (
+                                                        <div className="flex flex-col items-center">
+                                                            <CheckCircleOutlined className="text-2xl text-green-500 mb-2" />
+                                                            <Text className="text-white font-medium">{cvFile.name}</Text>
+                                                            <Button type="link" danger onClick={(e) => { e.stopPropagation(); setCvFile(null); }}>Remove File</Button>
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            <CloudUploadOutlined className="text-3xl text-slate-600 mb-2" />
+                                                            <Text className="text-slate-500">Click to select or drag and drop CV file</Text>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
 
                                     <Divider className="!border-white/5 my-10" />
 
