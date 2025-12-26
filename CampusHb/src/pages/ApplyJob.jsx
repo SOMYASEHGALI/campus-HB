@@ -191,350 +191,348 @@ const ApplyJob = () => {
                 </Button>
             </motion.div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
-                <div className="xl:col-span-1">
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                        <Card className="!bg-slate-800/40 !border-white/5 !rounded-3xl border-l-4 !border-l-indigo-500 overflow-hidden shadow-2xl">
-                            <div className="mb-8">
-                                <Title level={2} className="!text-white !mb-2 !font-bold leading-tight">{job.title}</Title>
-                                <div className="flex items-center gap-2 text-indigo-400 font-bold mb-4">
-                                    <BankOutlined /> {job.company}
-                                </div>
-                                <div className="space-y-4 py-6 border-y border-white/5">
-                                    <div className="flex items-center gap-3 text-slate-300">
-                                        <Tag color="rgba(99, 102, 241, 0.1)" className="!text-indigo-400 !m-0">ACTIVE</Tag>
-                                        <Text className="text-slate-500">• Posted {new Date(job.createdAt).toLocaleDateString()}</Text>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-xl bg-slate-700/50 flex items-center justify-center text-indigo-400">
-                                            <ProjectOutlined />
-                                        </div>
-                                        <div>
-                                            <Text className="text-slate-500 block text-xs uppercase font-bold letter-spacing-widest">Experience</Text>
-                                            <Text className="text-slate-200 font-medium">{job.experience || 'Not Specified'}</Text>
-                                        </div>
-                                    </div>
-                                </div>
+            <div className="space-y-10">
+                {/* Job Description Section - Top */}
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                    <Card className="!bg-slate-800/40 !border-white/5 !rounded-3xl border-l-4 !border-l-indigo-500 overflow-hidden shadow-2xl">
+                        <div className="mb-8">
+                            <Title level={2} className="!text-white !mb-2 !font-bold leading-tight">{job.title}</Title>
+                            <div className="flex items-center gap-2 text-indigo-400 font-bold mb-4">
+                                <BankOutlined /> {job.company}
                             </div>
-
-                            <div className="space-y-8">
-                                <div>
-                                    <Title level={5} className="!text-slate-300 mb-4 flex items-center gap-2 uppercase text-xs tracking-widest font-black">Role Description</Title>
-                                    <Paragraph className="text-slate-400 leading-relaxed">{job.description}</Paragraph>
+                            <div className="flex flex-wrap gap-6 py-6 border-y border-white/5">
+                                <div className="flex items-center gap-3 text-slate-300">
+                                    <Tag color="rgba(99, 102, 241, 0.1)" className="!text-indigo-400 !m-0">ACTIVE</Tag>
+                                    <Text className="text-slate-500">• Posted {new Date(job.createdAt).toLocaleDateString()}</Text>
                                 </div>
-
-                                {job.skills && job.skills.length > 0 && (
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-slate-700/50 flex items-center justify-center text-indigo-400">
+                                        <ProjectOutlined />
+                                    </div>
                                     <div>
-                                        <Title level={5} className="!text-slate-300 mb-4 uppercase text-xs tracking-widest font-black">Required Frameworks</Title>
-                                        <div className="flex flex-wrap gap-2">
-                                            {job.skills.map(skill => (
-                                                <Tag key={skill} className="!bg-indigo-500/10 !border-indigo-500/20 !text-indigo-300 !rounded-lg !m-0 px-3 py-1 text-sm font-medium">
-                                                    {skill}
-                                                </Tag>
-                                            ))}
-                                        </div>
+                                        <Text className="text-slate-500 block text-xs uppercase font-bold letter-spacing-widest">Experience</Text>
+                                        <Text className="text-slate-200 font-medium">{job.experience || 'Not Specified'}</Text>
                                     </div>
-                                )}
+                                </div>
                             </div>
-                        </Card>
-                    </motion.div>
-                </div>
+                        </div>
 
-                <div className="xl:col-span-2">
-                    <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
-                        <Card className="!bg-slate-800/60 !border-white/5 !rounded-[2.5rem] p-4 sm:p-10 !backdrop-blur-2xl shadow-2xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full -mr-32 -mt-32 blur-[80px]"></div>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                                <Title level={5} className="!text-slate-300 mb-4 flex items-center gap-2 uppercase text-xs tracking-widest font-black">Role Description</Title>
+                                <Paragraph className="text-slate-400 leading-relaxed">{job.description}</Paragraph>
+                            </div>
 
-                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12 relative z-10">
+                            {job.skills && job.skills.length > 0 && (
                                 <div>
-                                    <Title level={2} className="!text-white !m-0 !font-black !text-3xl">Candidate Intake</Title>
-                                    <Text className="text-slate-500 font-medium">Placement Cell: <span className="text-indigo-400 font-bold">{user.collegeName}</span></Text>
+                                    <Title level={5} className="!text-slate-300 mb-4 uppercase text-xs tracking-widest font-black">Required Frameworks</Title>
+                                    <div className="flex flex-wrap gap-2">
+                                        {job.skills.map(skill => (
+                                            <Tag key={skill} className="!bg-indigo-500/10 !border-indigo-500/20 !text-indigo-300 !rounded-lg !m-0 px-3 py-1 text-sm font-medium">
+                                                {skill}
+                                            </Tag>
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className="px-6 py-3 bg-slate-900/50 rounded-2xl border border-white/5 flex items-center gap-3">
-                                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                                    <Text className="text-slate-300 font-bold text-sm tracking-wide">SYSTEM SECURE</Text>
-                                </div>
+                            )}
+                        </div>
+                    </Card>
+                </motion.div>
+
+                {/* Application Form Section - Bottom */}
+                <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
+                    <Card className="!bg-slate-800/60 !border-white/5 !rounded-[2.5rem] p-4 sm:p-10 !backdrop-blur-2xl shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full -mr-32 -mt-32 blur-[80px]"></div>
+
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12 relative z-10">
+                            <div>
+                                <Title level={2} className="!text-white !m-0 !font-black !text-3xl">Candidate Intake</Title>
+                                <Text className="text-slate-500 font-medium">Placement Cell: <span className="text-indigo-400 font-bold">{user.collegeName}</span></Text>
                             </div>
+                            <div className="px-6 py-3 bg-slate-900/50 rounded-2xl border border-white/5 flex items-center gap-3">
+                                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                <Text className="text-slate-300 font-bold text-sm tracking-wide">SYSTEM SECURE</Text>
+                            </div>
+                        </div>
 
-                            {user.role === 'staff' ? (
-                                <div className="relative z-10 py-10 text-center">
-                                    {!isKeyVerified ? (
-                                        <div className="max-w-md mx-auto">
-                                            <div className="w-20 h-20 bg-amber-500/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                                                <ExperimentOutlined className="text-4xl text-amber-500" />
-                                            </div>
-                                            <Title level={3} className="!text-white mb-4">Staff Verification Required</Title>
-                                            <Text className="text-slate-400 block mb-8 text-lg">
-                                                Enter the <span className="text-amber-400 font-bold italic underline">HB-MASTER-KEY</span> to unlock bulk recruitment tools for <span className="text-white font-semibold">{job.company}</span>.
-                                            </Text>
-
-                                            <div className="space-y-6">
-                                                <Input.Password
-                                                    placeholder="Enter Access Key"
-                                                    value={bulkKey}
-                                                    onChange={(e) => setBulkKey(e.target.value)}
-                                                    className="!h-16 !rounded-2xl text-center text-2xl tracking-[0.5em] !bg-slate-900/50 !border-white/10"
-                                                    onPressEnter={() => {
-                                                        if (bulkKey === 'HBSTAFF2025') {
-                                                            setIsKeyVerified(true);
-                                                            message.success('Master Access Granted');
-                                                        } else {
-                                                            message.error('Invalid Credentials');
-                                                        }
-                                                    }}
-                                                />
-                                                <Button
-                                                    type="primary"
-                                                    size="large"
-                                                    block
-                                                    className="!h-16 !rounded-2xl font-bold text-lg !bg-amber-500 hover:!bg-amber-600 !border-none"
-                                                    onClick={() => {
-                                                        if (bulkKey === 'HBSTAFF2025') {
-                                                            setIsKeyVerified(true);
-                                                            message.success('Master Access Granted');
-                                                        } else {
-                                                            message.error('Invalid Credentials');
-                                                        }
-                                                    }}
-                                                >
-                                                    Verify & Unlock Bulk Upload
-                                                </Button>
-                                                <Text className="text-slate-500 text-xs flex items-center justify-center gap-2">
-                                                    <span className="w-2 h-2 bg-slate-600 rounded-full"></span>
-                                                    Single form submission is disabled for staff accounts
-                                                </Text>
-                                            </div>
+                        {user.role === 'staff' ? (
+                            <div className="relative z-10 py-10 text-center">
+                                {!isKeyVerified ? (
+                                    <div className="max-w-md mx-auto">
+                                        <div className="w-20 h-20 bg-amber-500/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                                            <ExperimentOutlined className="text-4xl text-amber-500" />
                                         </div>
-                                    ) : (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="max-w-2xl mx-auto"
-                                        >
-                                            <div className="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-green-500/20">
-                                                <SendOutlined className="text-4xl text-green-500" />
-                                            </div>
-                                            <Title level={3} className="!text-white mb-2">Master Upload Active</Title>
-                                            <Tag color="green" className="mb-8 !rounded-full px-4">Ready for Bulk Data Transmission</Tag>
+                                        <Title level={3} className="!text-white mb-4">Staff Verification Required</Title>
+                                        <Text className="text-slate-400 block mb-8 text-lg">
+                                            Enter the <span className="text-amber-400 font-bold italic underline">HB-MASTER-KEY</span> to unlock bulk recruitment tools for <span className="text-white font-semibold">{job.company}</span>.
+                                        </Text>
 
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                                                <input
-                                                    type="file"
-                                                    ref={sheetInputRef}
-                                                    style={{ display: 'none' }}
-                                                    accept=".csv, .xlsx, .xls"
-                                                    onChange={(e) => handleFileUpload(e, 'Database')}
-                                                />
-                                                <div className="glass-card p-6 !bg-indigo-600/5 border border-indigo-500/20 rounded-[2rem] hover:!bg-indigo-600/10 transition-all cursor-pointer group flex flex-col items-center">
-                                                    <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-4">
-                                                        <FileTextOutlined className="text-xl text-indigo-400" />
-                                                    </div>
-                                                    <Title level={5} className="!text-white mb-2 group-hover:text-indigo-400">Database (CSV/XLSX)</Title>
-                                                    <Text className="text-slate-500 text-xs text-center mb-6">Bulk application processing via student records</Text>
-                                                    <Button
-                                                        type="primary"
-                                                        block
-                                                        loading={isUploading}
-                                                        className="!h-12 !rounded-xl !bg-indigo-600"
-                                                        onClick={() => sheetInputRef.current.click()}
-                                                    >
-                                                        Upload Sheet
-                                                    </Button>
-                                                </div>
-
-                                                <input
-                                                    type="file"
-                                                    ref={resumeInputRef}
-                                                    style={{ display: 'none' }}
-                                                    accept=".pdf, .docx, .doc"
-                                                    multiple
-                                                    onChange={(e) => handleFileUpload(e, 'Resumes')}
-                                                />
-                                                <div className="glass-card p-6 !bg-amber-600/5 border border-amber-500/20 rounded-[2rem] hover:!bg-amber-600/10 transition-all cursor-pointer group flex flex-col items-center">
-                                                    <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center mb-4">
-                                                        <PaperClipOutlined className="text-xl text-amber-400" />
-                                                    </div>
-                                                    <Title level={5} className="!text-white mb-2 group-hover:text-amber-400">Resumes (PDF/DOCX)</Title>
-                                                    <Text className="text-slate-500 text-xs text-center mb-6">Mass upload of verified student portfolios</Text>
-                                                    <Button
-                                                        type="primary"
-                                                        block
-                                                        loading={isUploading}
-                                                        className="!h-12 !rounded-xl !bg-amber-600 !border-none"
-                                                        onClick={() => resumeInputRef.current.click()}
-                                                    >
-                                                        Upload Files
-                                                    </Button>
-                                                </div>
-                                            </div>
-
-                                            {isUploading && (
-                                                <div className="w-full mb-8 bg-black/40 backdrop-blur-xl p-8 rounded-[2rem] border border-white/10 shadow-2xl">
-                                                    <div className="flex justify-between items-center mb-6">
-                                                        <div>
-                                                            <Title level={4} className="!text-white !m-0 flex items-center gap-3">
-                                                                <CloudUploadOutlined className="text-cyan-400 animate-pulse" />
-                                                                Enterprise Uplink
-                                                            </Title>
-                                                            <Text className="text-slate-500 text-xs">Processing global residency requests</Text>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <Text className="text-cyan-400 font-mono text-xl font-bold">{uploadProgress}%</Text>
-                                                            <div className="text-[10px] text-slate-600 font-mono uppercase tracking-tighter">Throughput Optimized</div>
-                                                        </div>
-                                                    </div>
-
-                                                    <Progress
-                                                        percent={uploadProgress}
-                                                        status="active"
-                                                        strokeColor={{ '0%': '#06b6d4', '100%': '#6366f1' }}
-                                                        trailColor="rgba(255,255,255,0.03)"
-                                                        strokeWidth={12}
-                                                        showInfo={false}
-                                                        className="mb-8"
-                                                    />
-
-                                                    <div className="max-h-48 overflow-y-auto space-y-2 pr-2 custom-scrollbar font-mono">
-                                                        {uploadQueue.map((item, idx) => (
-                                                            <div
-                                                                key={idx}
-                                                                className={`flex items-center justify-between p-3 rounded-xl border transition-all ${idx === currentFileIndex ? 'bg-cyan-500/10 border-cyan-500/30' :
-                                                                    item.status === 'success' ? 'bg-green-500/5 border-green-500/10 opacity-60' :
-                                                                        'bg-white/5 border-white/5 opacity-40'
-                                                                    }`}
-                                                            >
-                                                                <div className="flex items-center gap-3 truncate max-w-[70%]">
-                                                                    {item.status === 'pending' && <LoadingOutlined className="text-slate-500" />}
-                                                                    {item.status === 'success' && <CheckCircleOutlined className="text-green-500" />}
-                                                                    {item.status === 'error' && <CloseCircleOutlined className="text-red-500" />}
-                                                                    <Text className="text-slate-300 text-xs truncate">{item.name}</Text>
-                                                                </div>
-                                                                <Text className={`text-[10px] font-bold ${idx === currentFileIndex ? 'text-cyan-400' :
-                                                                    item.status === 'success' ? 'text-green-500' : 'text-slate-600'
-                                                                    }`}>
-                                                                    {idx === currentFileIndex ? 'UPLOADING...' : item.status.toUpperCase()}
-                                                                </Text>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-
+                                        <div className="space-y-6">
+                                            <Input.Password
+                                                placeholder="Enter Access Key"
+                                                value={bulkKey}
+                                                onChange={(e) => setBulkKey(e.target.value)}
+                                                className="!h-16 !rounded-2xl text-center text-2xl tracking-[0.5em] !bg-slate-900/50 !border-white/10"
+                                                onPressEnter={() => {
+                                                    if (bulkKey === 'HBSTAFF2025') {
+                                                        setIsKeyVerified(true);
+                                                        message.success('Master Access Granted');
+                                                    } else {
+                                                        message.error('Invalid Credentials');
+                                                    }
+                                                }}
+                                            />
                                             <Button
-                                                type="text"
-                                                className="!text-slate-500 hover:!text-slate-300 !mt-4"
+                                                type="primary"
+                                                size="large"
+                                                block
+                                                className="!h-16 !rounded-2xl font-bold text-lg !bg-amber-500 hover:!bg-amber-600 !border-none"
                                                 onClick={() => {
-                                                    setIsKeyVerified(false);
-                                                    setBulkKey('');
+                                                    if (bulkKey === 'HBSTAFF2025') {
+                                                        setIsKeyVerified(true);
+                                                        message.success('Master Access Granted');
+                                                    } else {
+                                                        message.error('Invalid Credentials');
+                                                    }
                                                 }}
                                             >
-                                                Lock Session & Logout
+                                                Verify & Unlock Bulk Upload
                                             </Button>
-                                        </motion.div>
-                                    )}
-                                </div>
-                            ) : (
-                                <Form
-                                    form={form}
-                                    layout="vertical"
-                                    onFinish={onFinish}
-                                    requiredMark={false}
-                                    className="relative z-10"
-                                >
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
-                                        <Form.Item name="studentName" label={<span className="text-slate-300 font-bold">Full Legal Name</span>} rules={[{ required: true }]}>
-                                            <Input prefix={<UserOutlined className="text-slate-500 mr-2" />} placeholder="e.g. Rahul Sharma" className="!h-14 !rounded-2xl" />
-                                        </Form.Item>
-
-                                        <Form.Item name="email" label={<span className="text-slate-300 font-bold">University Email</span>} rules={[{ required: true, type: 'email' }]}>
-                                            <Input prefix={<MailOutlined className="text-slate-500 mr-2" />} placeholder="rahul@college.edu" className="!h-14 !rounded-2xl" />
-                                        </Form.Item>
-
-                                        <Form.Item name="phone" label={<span className="text-slate-300 font-bold">Mobile Connectivity</span>} rules={[{ required: true }]}>
-                                            <Input prefix={<PhoneOutlined className="text-slate-500 mr-2" />} placeholder="+91 98765-43210" className="!h-14 !rounded-2xl" />
-                                        </Form.Item>
-
-                                        <Form.Item name="rollNumber" label={<span className="text-slate-300 font-bold">Institutional UID / Roll No</span>}>
-                                            <Input prefix={<IdcardOutlined className="text-slate-500 mr-2" />} placeholder="CS-2024-512" className="!h-14 !rounded-2xl" />
-                                        </Form.Item>
+                                            <Text className="text-slate-500 text-xs flex items-center justify-center gap-2">
+                                                <span className="w-2 h-2 bg-slate-600 rounded-full"></span>
+                                                Single form submission is disabled for staff accounts
+                                            </Text>
+                                        </div>
                                     </div>
+                                ) : (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="max-w-2xl mx-auto"
+                                    >
+                                        <div className="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-green-500/20">
+                                            <SendOutlined className="text-4xl text-green-500" />
+                                        </div>
+                                        <Title level={3} className="!text-white mb-2">Master Upload Active</Title>
+                                        <Tag color="green" className="mb-8 !rounded-full px-4">Ready for Bulk Data Transmission</Tag>
 
-                                    <div className="mb-8">
-                                        <div className="flex gap-4 mb-6 p-1 bg-slate-900/50 rounded-2xl border border-white/5 w-fit">
-                                            <button
-                                                type="button"
-                                                onClick={() => setSubmissionType('link')}
-                                                className={`px-6 py-2 rounded-xl transition-all font-bold text-sm ${submissionType === 'link' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
-                                            >
-                                                Drive Link
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => setSubmissionType('file')}
-                                                className={`px-6 py-2 rounded-xl transition-all font-bold text-sm ${submissionType === 'file' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
-                                            >
-                                                Upload PDF/CV
-                                            </button>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                                            <input
+                                                type="file"
+                                                ref={sheetInputRef}
+                                                style={{ display: 'none' }}
+                                                accept=".csv, .xlsx, .xls"
+                                                onChange={(e) => handleFileUpload(e, 'Database')}
+                                            />
+                                            <div className="glass-card p-6 !bg-indigo-600/5 border border-indigo-500/20 rounded-[2rem] hover:!bg-indigo-600/10 transition-all cursor-pointer group flex flex-col items-center">
+                                                <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-4">
+                                                    <FileTextOutlined className="text-xl text-indigo-400" />
+                                                </div>
+                                                <Title level={5} className="!text-white mb-2 group-hover:text-indigo-400">Database (CSV/XLSX)</Title>
+                                                <Text className="text-slate-500 text-xs text-center mb-6">Bulk application processing via student records</Text>
+                                                <Button
+                                                    type="primary"
+                                                    block
+                                                    loading={isUploading}
+                                                    className="!h-12 !rounded-xl !bg-indigo-600"
+                                                    onClick={() => sheetInputRef.current.click()}
+                                                >
+                                                    Upload Sheet
+                                                </Button>
+                                            </div>
+
+                                            <input
+                                                type="file"
+                                                ref={resumeInputRef}
+                                                style={{ display: 'none' }}
+                                                accept=".pdf, .docx, .doc"
+                                                multiple
+                                                onChange={(e) => handleFileUpload(e, 'Resumes')}
+                                            />
+                                            <div className="glass-card p-6 !bg-amber-600/5 border border-amber-500/20 rounded-[2rem] hover:!bg-amber-600/10 transition-all cursor-pointer group flex flex-col items-center">
+                                                <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center mb-4">
+                                                    <PaperClipOutlined className="text-xl text-amber-400" />
+                                                </div>
+                                                <Title level={5} className="!text-white mb-2 group-hover:text-amber-400">Resumes (PDF/DOCX)</Title>
+                                                <Text className="text-slate-500 text-xs text-center mb-6">Mass upload of verified student portfolios</Text>
+                                                <Button
+                                                    type="primary"
+                                                    block
+                                                    loading={isUploading}
+                                                    className="!h-12 !rounded-xl !bg-amber-600 !border-none"
+                                                    onClick={() => resumeInputRef.current.click()}
+                                                >
+                                                    Upload Files
+                                                </Button>
+                                            </div>
                                         </div>
 
-                                        {submissionType === 'link' ? (
-                                            <Form.Item
-                                                name="resumeUrl"
-                                                label={<span className="text-slate-300 font-bold">Verified Portfolio/Resume Link</span>}
-                                                rules={[{ required: submissionType === 'link', type: 'url', message: 'Please enter a valid URL' }]}
-                                                extra={<Text className="text-slate-500 text-xs italic">Ensure link permissions are set to "Anyone with the link can view"</Text>}
-                                            >
-                                                <Input prefix={<LinkOutlined className="text-indigo-500 mr-2" />} placeholder="https://drive.google.com/your-resume-link" className="!h-14 !rounded-2xl !border-indigo-500/30" />
-                                            </Form.Item>
-                                        ) : (
-                                            <div className="space-y-4">
-                                                <Text className="text-slate-300 font-bold block mb-2">Upload Professional CV (PDF Only)</Text>
-                                                <div
-                                                    onClick={() => !cvFile && resumeInputRef.current?.click()}
-                                                    className={`h-32 border-2 border-dashed rounded-[2rem] flex flex-col items-center justify-center transition-all cursor-pointer ${cvFile ? 'border-green-500/30 bg-green-500/5' : 'border-white/10 hover:border-indigo-500/30 bg-slate-900/30'}`}
-                                                >
-                                                    <input
-                                                        type="file"
-                                                        ref={resumeInputRef}
-                                                        className="hidden"
-                                                        accept=".pdf,.doc,.docx"
-                                                        onChange={(e) => setCvFile(e.target.files[0])}
-                                                    />
-                                                    {cvFile ? (
-                                                        <div className="flex flex-col items-center">
-                                                            <CheckCircleOutlined className="text-2xl text-green-500 mb-2" />
-                                                            <Text className="text-white font-medium">{cvFile.name}</Text>
-                                                            <Button type="link" danger onClick={(e) => { e.stopPropagation(); setCvFile(null); }}>Remove File</Button>
+                                        {isUploading && (
+                                            <div className="w-full mb-8 bg-black/40 backdrop-blur-xl p-8 rounded-[2rem] border border-white/10 shadow-2xl">
+                                                <div className="flex justify-between items-center mb-6">
+                                                    <div>
+                                                        <Title level={4} className="!text-white !m-0 flex items-center gap-3">
+                                                            <CloudUploadOutlined className="text-cyan-400 animate-pulse" />
+                                                            Enterprise Uplink
+                                                        </Title>
+                                                        <Text className="text-slate-500 text-xs">Processing global residency requests</Text>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <Text className="text-cyan-400 font-mono text-xl font-bold">{uploadProgress}%</Text>
+                                                        <div className="text-[10px] text-slate-600 font-mono uppercase tracking-tighter">Throughput Optimized</div>
+                                                    </div>
+                                                </div>
+
+                                                <Progress
+                                                    percent={uploadProgress}
+                                                    status="active"
+                                                    strokeColor={{ '0%': '#06b6d4', '100%': '#6366f1' }}
+                                                    trailColor="rgba(255,255,255,0.03)"
+                                                    strokeWidth={12}
+                                                    showInfo={false}
+                                                    className="mb-8"
+                                                />
+
+                                                <div className="max-h-48 overflow-y-auto space-y-2 pr-2 custom-scrollbar font-mono">
+                                                    {uploadQueue.map((item, idx) => (
+                                                        <div
+                                                            key={idx}
+                                                            className={`flex items-center justify-between p-3 rounded-xl border transition-all ${idx === currentFileIndex ? 'bg-cyan-500/10 border-cyan-500/30' :
+                                                                item.status === 'success' ? 'bg-green-500/5 border-green-500/10 opacity-60' :
+                                                                    'bg-white/5 border-white/5 opacity-40'
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-center gap-3 truncate max-w-[70%]">
+                                                                {item.status === 'pending' && <LoadingOutlined className="text-slate-500" />}
+                                                                {item.status === 'success' && <CheckCircleOutlined className="text-green-500" />}
+                                                                {item.status === 'error' && <CloseCircleOutlined className="text-red-500" />}
+                                                                <Text className="text-slate-300 text-xs truncate">{item.name}</Text>
+                                                            </div>
+                                                            <Text className={`text-[10px] font-bold ${idx === currentFileIndex ? 'text-cyan-400' :
+                                                                item.status === 'success' ? 'text-green-500' : 'text-slate-600'
+                                                                }`}>
+                                                                {idx === currentFileIndex ? 'UPLOADING...' : item.status.toUpperCase()}
+                                                            </Text>
                                                         </div>
-                                                    ) : (
-                                                        <>
-                                                            <CloudUploadOutlined className="text-3xl text-slate-600 mb-2" />
-                                                            <Text className="text-slate-500">Click to select or drag and drop CV file</Text>
-                                                        </>
-                                                    )}
+                                                    ))}
                                                 </div>
                                             </div>
                                         )}
+
+                                        <Button
+                                            type="text"
+                                            className="!text-slate-500 hover:!text-slate-300 !mt-4"
+                                            onClick={() => {
+                                                setIsKeyVerified(false);
+                                                setBulkKey('');
+                                            }}
+                                        >
+                                            Lock Session & Logout
+                                        </Button>
+                                    </motion.div>
+                                )}
+                            </div>
+                        ) : (
+                            <Form
+                                form={form}
+                                layout="vertical"
+                                onFinish={onFinish}
+                                requiredMark={false}
+                                className="relative z-10"
+                            >
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                                    <Form.Item name="studentName" label={<span className="text-slate-300 font-bold">Full Legal Name</span>} rules={[{ required: true }]}>
+                                        <Input prefix={<UserOutlined className="text-slate-500 mr-2" />} placeholder="e.g. Rahul Sharma" className="!h-14 !rounded-2xl" />
+                                    </Form.Item>
+
+                                    <Form.Item name="email" label={<span className="text-slate-300 font-bold">University Email</span>} rules={[{ required: true, type: 'email' }]}>
+                                        <Input prefix={<MailOutlined className="text-slate-500 mr-2" />} placeholder="rahul@college.edu" className="!h-14 !rounded-2xl" />
+                                    </Form.Item>
+
+                                    <Form.Item name="phone" label={<span className="text-slate-300 font-bold">Mobile Connectivity</span>} rules={[{ required: true }]}>
+                                        <Input prefix={<PhoneOutlined className="text-slate-500 mr-2" />} placeholder="+91 98765-43210" className="!h-14 !rounded-2xl" />
+                                    </Form.Item>
+
+                                    <Form.Item name="rollNumber" label={<span className="text-slate-300 font-bold">Institutional UID / Roll No</span>}>
+                                        <Input prefix={<IdcardOutlined className="text-slate-500 mr-2" />} placeholder="CS-2024-512" className="!h-14 !rounded-2xl" />
+                                    </Form.Item>
+                                </div>
+
+                                <div className="mb-8">
+                                    <div className="flex gap-4 mb-6 p-1 bg-slate-900/50 rounded-2xl border border-white/5 w-fit">
+                                        <button
+                                            type="button"
+                                            onClick={() => setSubmissionType('link')}
+                                            className={`px-6 py-2 rounded-xl transition-all font-bold text-sm ${submissionType === 'link' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                                        >
+                                            Drive Link
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setSubmissionType('file')}
+                                            className={`px-6 py-2 rounded-xl transition-all font-bold text-sm ${submissionType === 'file' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                                        >
+                                            Upload PDF/CV
+                                        </button>
                                     </div>
 
-                                    <Divider className="!border-white/5 my-10" />
+                                    {submissionType === 'link' ? (
+                                        <Form.Item
+                                            name="resumeUrl"
+                                            label={<span className="text-slate-300 font-bold">Verified Portfolio/Resume Link</span>}
+                                            rules={[{ required: submissionType === 'link', type: 'url', message: 'Please enter a valid URL' }]}
+                                            extra={<Text className="text-slate-500 text-xs italic">Ensure link permissions are set to "Anyone with the link can view"</Text>}
+                                        >
+                                            <Input prefix={<LinkOutlined className="text-indigo-500 mr-2" />} placeholder="https://drive.google.com/your-resume-link" className="!h-14 !rounded-2xl !border-indigo-500/30" />
+                                        </Form.Item>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            <Text className="text-slate-300 font-bold block mb-2">Upload Professional CV (PDF Only)</Text>
+                                            <div
+                                                onClick={() => !cvFile && resumeInputRef.current?.click()}
+                                                className={`h-32 border-2 border-dashed rounded-[2rem] flex flex-col items-center justify-center transition-all cursor-pointer ${cvFile ? 'border-green-500/30 bg-green-500/5' : 'border-white/10 hover:border-indigo-500/30 bg-slate-900/30'}`}
+                                            >
+                                                <input
+                                                    type="file"
+                                                    ref={resumeInputRef}
+                                                    className="hidden"
+                                                    accept=".pdf,.doc,.docx"
+                                                    onChange={(e) => setCvFile(e.target.files[0])}
+                                                />
+                                                {cvFile ? (
+                                                    <div className="flex flex-col items-center">
+                                                        <CheckCircleOutlined className="text-2xl text-green-500 mb-2" />
+                                                        <Text className="text-white font-medium">{cvFile.name}</Text>
+                                                        <Button type="link" danger onClick={(e) => { e.stopPropagation(); setCvFile(null); }}>Remove File</Button>
+                                                    </div>
+                                                ) : (
+                                                    <>
+                                                        <CloudUploadOutlined className="text-3xl text-slate-600 mb-2" />
+                                                        <Text className="text-slate-500">Click to select or drag and drop CV file</Text>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
 
-                                    <Button
-                                        type="primary"
-                                        htmlType="submit"
-                                        loading={submitting}
-                                        block
-                                        className="!h-16 !rounded-2xl font-black text-xl shadow-2xl flex items-center justify-center gap-3 group overflow-hidden"
-                                    >
-                                        <span className="group-hover:translate-x-1 transition-transform">Authorize Contribution</span>
-                                        <SendOutlined className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
-                                    </Button>
-                                </Form>
-                            )}
-                        </Card>
-                        <ToastContainer theme="dark" position="bottom-right" />
-                    </motion.div>
-                </div>
+                                <Divider className="!border-white/5 my-10" />
+
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    loading={submitting}
+                                    block
+                                    className="!h-16 !rounded-2xl font-black text-xl shadow-2xl flex items-center justify-center gap-3 group overflow-hidden"
+                                >
+                                    <span className="group-hover:translate-x-1 transition-transform">Authorize Contribution</span>
+                                    <SendOutlined className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
+                                </Button>
+                            </Form>
+                        )}
+                    </Card>
+                    <ToastContainer theme="dark" position="bottom-right" />
+                </motion.div>
             </div>
         </div>
     );

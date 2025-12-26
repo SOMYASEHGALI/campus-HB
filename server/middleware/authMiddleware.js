@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   let token = null;
 
   //ai 
@@ -24,6 +25,16 @@ const auth = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Check if user is active
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    if (!user.isActive) {
+      return res.status(403).json({ message: "Your account has been deactivated. Please contact administrator." });
+    }
+
     req.user = decoded;
     next();
   } catch (err) {
@@ -33,19 +44,19 @@ const auth = (req, res, next) => {
 
 
 const admin = (req, res, next) => {
-    if (req.user.role !== 'admin') {
-        return res.status(403).json({ message: 'Access denied. Admins only.' });
-    }
-    next();
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Access denied. Admins only.' });
+  }
+  next();
 };
 
 const authorization = (allowedRoles) => {
-    return (req, res, next) =>{
-        if(!allowedRoles.includes(req.user.role)){
-            return res.status(409).json({message : "your are not allowed"})
-        }
-        next();
+  return (req, res, next) => {
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(409).json({ message: "your are not allowed" })
     }
+    next();
+  }
 }
 
 module.exports = { auth, admin };

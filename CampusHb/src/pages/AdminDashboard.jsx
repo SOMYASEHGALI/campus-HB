@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Input, Button, Typography, message, Card, Table, Tag, Space, Modal, Tooltip, Select, Badge } from 'antd';
-import { PlusOutlined, DeleteOutlined, DownloadOutlined, RocketOutlined, GlobalOutlined, DollarOutlined, ExperimentOutlined, BankOutlined, TeamOutlined, FileTextOutlined, EyeOutlined, CloudUploadOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, DownloadOutlined, RocketOutlined, GlobalOutlined, DollarOutlined, ExperimentOutlined, BankOutlined, TeamOutlined, FileTextOutlined, EyeOutlined, CloudUploadOutlined, UserOutlined, StopOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs } from 'antd';
 
@@ -13,6 +13,7 @@ const AdminDashboard = () => {
     const [jobs, setJobs] = useState([]);
     const [colleges, setColleges] = useState([]);
     const [applications, setApplications] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +24,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         fetchJobs();
         fetchStats();
+        fetchUsers();
     }, []);
 
     const fetchJobs = async () => {
@@ -51,6 +53,60 @@ const AdminDashboard = () => {
         } catch (err) {
             console.error(err);
         }
+    };
+
+    const fetchUsers = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get('http://localhost:5000/api/users', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setUsers(res.data);
+        } catch (err) {
+            console.error('Failed to fetch users:', err);
+            message.error('Failed to fetch users');
+        }
+    };
+
+    const handleToggleUserStatus = async (userId, currentStatus) => {
+        try {
+            console.log('[Frontend] Toggling user status:', { userId, currentStatus });
+            const token = localStorage.getItem('token');
+            const response = await axios.patch(`http://localhost:5000/api/users/${userId}/toggle-status`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            console.log('[Frontend] Toggle response:', response.data);
+            message.success(`User ${currentStatus ? 'deactivated' : 'activated'} successfully`);
+            fetchUsers();
+        } catch (err) {
+            console.error('[Frontend] Toggle error:', err);
+            console.error('[Frontend] Error response:', err.response?.data);
+            message.error(err.response?.data?.message || err.message || 'Failed to update user status');
+        }
+    };
+
+    const handleDeleteUser = async (userId, userName) => {
+        Modal.confirm({
+            title: 'Delete User Permanently?',
+            content: `Are you sure you want to delete ${userName}? This will permanently remove the user and all their applications from the system.`,
+            okText: 'Delete Permanently',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            centered: true,
+            onOk: async () => {
+                try {
+                    const token = localStorage.getItem('token');
+                    await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    message.success('User deleted successfully');
+                    fetchUsers();
+                    fetchStats();
+                } catch (err) {
+                    message.error(err.response?.data?.message || 'Failed to delete user');
+                }
+            }
+        });
     };
 
     const handlePostJob = async (values) => {
@@ -378,6 +434,113 @@ const AdminDashboard = () => {
         return data.filter(group => group.collegeName === bulkFilter);
     };
 
+    const userColumns = [
+        {
+            title: 'User Information',
+            key: 'userInfo',
+            render: (_, record) => (
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center text-xl font-black shadow-lg">
+                        {record.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                        <Text className="!text-white font-bold block text-lg">{record.name}</Text>
+                        <Text className="text-slate-400 text-xs">{record.email}</Text>
+                    </div>
+                </div>
+            )
+        },
+        {
+            title: 'College',
+            dataIndex: 'collegeName',
+            key: 'collegeName',
+            render: (text) => <Text className="text-indigo-400 font-semibold">{text}</Text>
+        },
+        {
+            title: 'Role',
+            dataIndex: 'role',
+            key: 'role',
+            render: (role) => {
+                const roleColors = {
+                    admin: 'red',
+                    staff: 'blue',
+                    student: 'green'
+                };
+                return (
+                    <Tag color={roleColors[role]} className="!px-4 !rounded-lg !font-bold uppercase">
+                        {role}
+                    </Tag>
+                );
+            }
+        },
+        {
+            title: 'Applications',
+            dataIndex: 'applicationCount',
+            key: 'applicationCount',
+            render: (count) => (
+                <Tag color="purple" className="!px-4 !rounded-lg">
+                    {count || 0} Applied
+                </Tag>
+            )
+        },
+        {
+            title: 'Status',
+            dataIndex: 'isActive',
+            key: 'isActive',
+            render: (isActive) => (
+                <Tag
+                    color={isActive ? 'success' : 'error'}
+                    className="!px-4 !rounded-full !font-bold"
+                    icon={isActive ? <CheckCircleOutlined /> : <StopOutlined />}
+                >
+                    {isActive ? 'Active' : 'Deactivated'}
+                </Tag>
+            )
+        },
+        {
+            title: 'Joined',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            render: (date) => (
+                <Text className="text-slate-400 text-sm">
+                    {new Date(date).toLocaleDateString()}
+                </Text>
+            )
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Space size="small">
+                    <Tooltip title={record.isActive ? 'Deactivate Account' : 'Activate Account'}>
+                        <Button
+                            size="small"
+                            icon={record.isActive ? <StopOutlined /> : <CheckCircleOutlined />}
+                            onClick={() => handleToggleUserStatus(record._id, record.isActive)}
+                            className={record.isActive
+                                ? "!bg-orange-600/20 !text-orange-400 !border-orange-500/30 hover:!bg-orange-600 hover:!text-white transition-all rounded-lg"
+                                : "!bg-green-600/20 !text-green-400 !border-green-500/30 hover:!bg-green-600 hover:!text-white transition-all rounded-lg"
+                            }
+                        >
+                            {record.isActive ? 'Deactivate' : 'Activate'}
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title="Delete User Permanently">
+                        <Button
+                            danger
+                            size="small"
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleDeleteUser(record._id, record.name)}
+                            className="!bg-red-500/10 !border-red-500/20 hover:!bg-red-500 hover:!text-white transition-all rounded-lg"
+                        >
+                            Delete
+                        </Button>
+                    </Tooltip>
+                </Space>
+            )
+        }
+    ];
+
     return (
         <div className="max-w-7xl mx-auto px-4 py-12">
             <motion.div
@@ -397,6 +560,7 @@ const AdminDashboard = () => {
                         onClick={() => {
                             fetchJobs();
                             fetchStats();
+                            fetchUsers();
                             message.success('System synchronization successful');
                         }}
                     >
@@ -595,6 +759,47 @@ const AdminDashboard = () => {
                                                         <CloudUploadOutlined className="text-5xl text-slate-700 mb-4" />
                                                         <div className="text-slate-500 text-lg font-medium">No verified staff transmissions found</div>
                                                         <div className="text-slate-600 text-sm mt-2">Grouped data will appear here once bulk broadcasts are initiated.</div>
+                                                    </div>
+                                                )
+                                            }}
+                                        />
+                                    </div>
+                                )
+                            },
+                            {
+                                key: '5',
+                                label: <span><UserOutlined className="text-amber-400" /> User Management <Badge count={users.length} showZero className="ml-2" color="#f59e0b" /></span>,
+                                children: (
+                                    <div className="space-y-6">
+                                        <div className="bg-slate-800/20 p-6 rounded-2xl border border-white/5">
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <Title level={4} className="!text-white !m-0">System Users</Title>
+                                                    <Text className="text-slate-500">Manage all registered users across the platform</Text>
+                                                </div>
+                                                <div className="flex gap-3">
+                                                    <Tag color="green" className="!px-4 !py-2 !rounded-lg !text-sm">
+                                                        {users.filter(u => u.isActive).length} Active
+                                                    </Tag>
+                                                    <Tag color="red" className="!px-4 !py-2 !rounded-lg !text-sm">
+                                                        {users.filter(u => !u.isActive).length} Deactivated
+                                                    </Tag>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <Table
+                                            columns={userColumns}
+                                            dataSource={users}
+                                            loading={loading}
+                                            rowKey="_id"
+                                            pagination={{ pageSize: 10 }}
+                                            className="custom-table"
+                                            locale={{
+                                                emptyText: (
+                                                    <div className="py-20 text-center">
+                                                        <UserOutlined className="text-5xl text-slate-700 mb-4" />
+                                                        <div className="text-slate-500 text-lg font-medium">No users found</div>
+                                                        <div className="text-slate-600 text-sm mt-2">User accounts will appear here once registered.</div>
                                                     </div>
                                                 )
                                             }}
