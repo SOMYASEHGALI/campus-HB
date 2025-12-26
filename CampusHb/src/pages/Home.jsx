@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Card, Button, Tag, Typography, Skeleton, Empty, Badge, Modal, Input, message } from 'antd';
-import { EnvironmentOutlined, DollarOutlined, ExperimentOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined, DollarOutlined, ExperimentOutlined, ArrowRightOutlined, RocketOutlined, TeamOutlined, TrophyOutlined, SafetyOutlined, ThunderboltOutlined, StarOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 
 const { Title, Text } = Typography;
@@ -34,38 +34,256 @@ const Home = () => {
 
     if (!user) {
         return (
-            <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+            <div className="min-h-screen">
+                {/* Section 1: Hero - Empowering Students and Placement Cells */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
+                    className="max-w-7xl mx-auto px-4 py-20 text-center min-h-screen flex flex-col justify-center"
                 >
-                    <Title className="!text-6xl !text-white !font-bold mb-6 !leading-tight">
-                        The Next Generation of <br />
-                        <span className="gradient-text">Campus Recruitment</span>
-                    </Title>
-                    <Text className="text-xl text-slate-400 mb-12 block max-w-2xl mx-auto leading-relaxed">
-                        Bridge the gap between talent and opportunity. Our platform empowers placement cells
-                        to streamline hiring processes with cutting-edge technology.
-                    </Text>
-                    <div className="flex gap-4 justify-center mt-10">
-                        <Link to="/register">
-                            <Button type="primary" size="large" className="!h-14 px-10 !text-lg rounded-xl">
-                                Join as College
-                            </Button>
-                        </Link>
-                        <Link to="/login">
-                            <Button size="large" ghost className="!h-14 px-10 !text-lg rounded-xl !text-white !border-white/20 hover:!border-indigo-400">
-                                View Openings
-                            </Button>
-                        </Link>
+                    <div className="mb-6">
+                        <span className="inline-block px-6 py-2 bg-indigo-500/10 border border-indigo-500/30 rounded-full text-indigo-400 font-semibold text-sm tracking-wide uppercase mb-8">
+                            🚀 Next-Gen Campus Recruitment Platform
+                        </span>
                     </div>
 
-                    <div className="mt-20 p-8 glass-card border-dashed">
-                        <p className="text-indigo-400 font-medium tracking-wide uppercase text-sm">
-                            🔒 Authenticated Access Only
-                        </p>
-                        <p className="text-slate-500 mt-2">Please login to access live job boards and recruitment statistics.</p>
+                    <Title className="!text-7xl !text-white !font-extrabold mb-8 !leading-tight">
+                        Empowering Students &<br />
+                        <span className="gradient-text">Placement Cells</span>
+                    </Title>
+
+                    <Text className="text-2xl text-slate-300 mb-6 block max-w-3xl mx-auto leading-relaxed font-medium">
+                        Our platform empowers students and placement cells by <span className="text-indigo-400 font-bold">increasing the opportunities</span> for them
+                    </Text>
+
+                    <Text className="text-lg text-slate-400 mb-16 block max-w-2xl mx-auto leading-relaxed">
+                        Bridge the gap between talent and opportunity with cutting-edge technology designed for modern campus recruitment
+                    </Text>
+
+                    {/* Feature Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="glass-card p-8 hover:border-indigo-500/50 transition-all group"
+                        >
+                            <div className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <RocketOutlined className="text-3xl text-indigo-400" />
+                            </div>
+                            <h3 className="text-white font-bold text-xl mb-2">Streamlined Process</h3>
+                            <p className="text-slate-400">Simplify recruitment with our intuitive platform</p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="glass-card p-8 hover:border-indigo-500/50 transition-all group"
+                        >
+                            <div className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <ThunderboltOutlined className="text-3xl text-indigo-400" />
+                            </div>
+                            <h3 className="text-white font-bold text-xl mb-2">Real-Time Updates</h3>
+                            <p className="text-slate-400">Stay connected with instant notifications</p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="glass-card p-8 hover:border-indigo-500/50 transition-all group"
+                        >
+                            <div className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <SafetyOutlined className="text-3xl text-indigo-400" />
+                            </div>
+                            <h3 className="text-white font-bold text-xl mb-2">Secure & Reliable</h3>
+                            <p className="text-slate-400">Enterprise-grade security for your data</p>
+                        </motion.div>
+                    </div>
+
+                    <div className="flex items-center justify-center gap-2 text-slate-500 mb-4">
+                        <div className="h-px w-12 bg-slate-700"></div>
+                        <span className="text-sm">Scroll to explore</span>
+                        <div className="h-px w-12 bg-slate-700"></div>
+                    </div>
+                </motion.div>
+
+                {/* Section 2: Join as College Students / Placement Cells */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                    viewport={{ once: true }}
+                    className="max-w-7xl mx-auto px-4 py-32 min-h-screen flex flex-col justify-center"
+                >
+                    <div className="text-center mb-16">
+                        <span className="inline-block px-6 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 font-semibold text-sm tracking-wide uppercase mb-6">
+                            ✨ Join Our Community
+                        </span>
+                        <Title className="!text-6xl !text-white !font-extrabold mb-6 !leading-tight">
+                            Who Can <span className="gradient-text">Join?</span>
+                        </Title>
+                        <Text className="text-xl text-slate-300 block max-w-2xl mx-auto">
+                            Whether you're a student seeking opportunities or a placement cell managing recruitment
+                        </Text>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                        {/* Students Card */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                            viewport={{ once: true }}
+                            className="glass-card p-10 hover:border-indigo-500/50 transition-all group relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full -mr-16 -mt-16"></div>
+                            <div className="relative">
+                                <div className="w-20 h-20 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <TeamOutlined className="text-4xl text-indigo-400" />
+                                </div>
+                                <h3 className="text-white font-bold text-3xl mb-4">College Students</h3>
+                                <p className="text-slate-400 text-lg mb-6 leading-relaxed">
+                                    Access exclusive job opportunities, track your applications, and connect with top recruiters
+                                </p>
+                                <ul className="space-y-3 mb-8">
+                                    <li className="flex items-center gap-3 text-slate-300">
+                                        <StarOutlined className="text-indigo-400" />
+                                        <span>Browse unlimited job postings</span>
+                                    </li>
+                                    <li className="flex items-center gap-3 text-slate-300">
+                                        <StarOutlined className="text-indigo-400" />
+                                        <span>One-click application process</span>
+                                    </li>
+                                    <li className="flex items-center gap-3 text-slate-300">
+                                        <StarOutlined className="text-indigo-400" />
+                                        <span>Real-time application tracking</span>
+                                    </li>
+                                </ul>
+                                <Link to="/register">
+                                    <Button
+                                        type="primary"
+                                        size="large"
+                                        block
+                                        className="!h-14 !text-lg !rounded-xl font-bold group-hover:scale-105 transition-transform"
+                                    >
+                                        Join as Student
+                                    </Button>
+                                </Link>
+                            </div>
+                        </motion.div>
+
+                        {/* Placement Cells Card */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 }}
+                            viewport={{ once: true }}
+                            className="glass-card p-10 hover:border-purple-500/50 transition-all group relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full -mr-16 -mt-16"></div>
+                            <div className="relative">
+                                <div className="w-20 h-20 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <TrophyOutlined className="text-4xl text-purple-400" />
+                                </div>
+                                <h3 className="text-white font-bold text-3xl mb-4">Placement Cells</h3>
+                                <p className="text-slate-400 text-lg mb-6 leading-relaxed">
+                                    Manage recruitment drives, post jobs, and streamline the entire placement process
+                                </p>
+                                <ul className="space-y-3 mb-8">
+                                    <li className="flex items-center gap-3 text-slate-300">
+                                        <StarOutlined className="text-purple-400" />
+                                        <span>Bulk resume uploads</span>
+                                    </li>
+                                    <li className="flex items-center gap-3 text-slate-300">
+                                        <StarOutlined className="text-purple-400" />
+                                        <span>Advanced analytics dashboard</span>
+                                    </li>
+                                    <li className="flex items-center gap-3 text-slate-300">
+                                        <StarOutlined className="text-purple-400" />
+                                        <span>Centralized application management</span>
+                                    </li>
+                                </ul>
+                                <Link to="/register">
+                                    <Button
+                                        size="large"
+                                        block
+                                        className="!h-14 !text-lg !rounded-xl font-bold !bg-purple-500 hover:!bg-purple-600 !text-white !border-0 group-hover:scale-105 transition-transform"
+                                    >
+                                        Join as Placement Cell
+                                    </Button>
+                                </Link>
+                            </div>
+                        </motion.div>
+                    </div>
+                </motion.div>
+
+                {/* Section 3: Get Started - Unlock New Opportunities */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                    viewport={{ once: true }}
+                    className="max-w-7xl mx-auto px-4 py-32 min-h-screen flex flex-col justify-center"
+                >
+                    <div className="text-center">
+                        <span className="inline-block px-6 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 font-semibold text-sm tracking-wide uppercase mb-6">
+                            🎯 Ready to Begin?
+                        </span>
+                        <Title className="!text-7xl !text-white !font-extrabold mb-8 !leading-tight">
+                            Unlock New <br />
+                            <span className="gradient-text">Opportunities</span>
+                        </Title>
+                        <Text className="text-2xl text-slate-300 mb-12 block max-w-3xl mx-auto leading-relaxed">
+                            Start your journey today and discover endless possibilities for growth and success
+                        </Text>
+
+                        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                            <Link to="/register">
+                                <Button
+                                    type="primary"
+                                    size="large"
+                                    icon={<RocketOutlined />}
+                                    className="!h-16 px-12 !text-xl !rounded-2xl font-bold shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all"
+                                >
+                                    Get Started Now
+                                </Button>
+                            </Link>
+                            <Link to="/login">
+                                <Button
+                                    size="large"
+                                    ghost
+                                    className="!h-16 px-12 !text-xl !rounded-2xl !text-white !border-white/20 hover:!border-indigo-400 font-bold"
+                                >
+                                    Already Have an Account?
+                                </Button>
+                            </Link>
+                        </div>
+
+                        {/* Stats Section */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mt-20">
+                            <div className="glass-card p-8 border-dashed">
+                                <div className="text-5xl font-extrabold text-indigo-400 mb-2">500+</div>
+                                <div className="text-slate-400 font-medium">Active Students</div>
+                            </div>
+                            <div className="glass-card p-8 border-dashed">
+                                <div className="text-5xl font-extrabold text-purple-400 mb-2">50+</div>
+                                <div className="text-slate-400 font-medium">Partner Colleges</div>
+                            </div>
+                            <div className="glass-card p-8 border-dashed">
+                                <div className="text-5xl font-extrabold text-emerald-400 mb-2">1000+</div>
+                                <div className="text-slate-400 font-medium">Job Opportunities</div>
+                            </div>
+                        </div>
+
+                        <div className="mt-20 p-8 glass-card border-dashed max-w-2xl mx-auto">
+                            <p className="text-indigo-400 font-medium tracking-wide uppercase text-sm">
+                                🔒 Authenticated Access Only
+                            </p>
+                            <p className="text-slate-500 mt-2">Please login to access live job boards and recruitment statistics.</p>
+                        </div>
                     </div>
                 </motion.div>
             </div>

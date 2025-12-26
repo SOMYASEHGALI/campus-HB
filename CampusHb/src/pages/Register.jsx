@@ -10,7 +10,31 @@ const { Option } = Select;
 
 const Register = () => {
     const [loading, setLoading] = useState(false);
+    const [showOtherCollege, setShowOtherCollege] = useState(false);
+    const [form] = Form.useForm();
     const navigate = useNavigate();
+
+    const colleges = [
+        'IIT Roorkee',
+        'JECRC',
+        'Manipal Institute of Technology',
+        'Global Institute of Technology',
+        'BITS Mesra',
+        'Poornima',
+        'Gyan Vihar',
+        'Jaipur National University',
+        'Other'
+    ];
+
+    const handleCollegeChange = (value) => {
+        if (value === 'Other') {
+            setShowOtherCollege(true);
+            form.setFieldsValue({ collegeName: '' });
+        } else {
+            setShowOtherCollege(false);
+            form.setFieldsValue({ collegeName: value });
+        }
+    };
 
     const onFinish = async (values) => {
         setLoading(true);
@@ -37,11 +61,12 @@ const Register = () => {
                 <Card className="!bg-slate-800/50 !border-white/10 !rounded-[2rem] !backdrop-blur-xl p-4 sm:p-10 shadow-2xl">
                     <div className="text-center mb-10">
                         <Title level={1} className="!text-white !m-0 !font-extrabold !text-4xl">Get Started</Title>
-                        <Text className="text-slate-400 text-lg">Join the ecosystem of elite placement cells</Text>
+                        <Text className="text-slate-400 text-lg">Our platform empowers students and placement cells by increasing the opportunities for them</Text>
                     </div>
 
                     <Form
                         name="register"
+                        form={form}
                         layout="vertical"
                         onFinish={onFinish}
                         requiredMark={false}
@@ -65,12 +90,45 @@ const Register = () => {
                         </div>
 
                         <Form.Item
-                            name="collegeName"
-                            label={<span className="text-slate-300 font-medium">Institutional Name</span>}
-                            rules={[{ required: true, message: 'Please enter your college name' }]}
+                            name="collegeSelector"
+                            label={<span className="text-slate-300 font-medium">Select Your Institution</span>}
+                            rules={[{ required: true, message: 'Please select your institution' }]}
                         >
-                            <Input prefix={<BankOutlined className="text-slate-500 mr-2" />} placeholder="e.g. Indian Institute of Technology" className="!h-12 !rounded-xl" />
+                            <Select
+                                className="!h-12 !rounded-xl"
+                                placeholder="Choose your college/university"
+                                onChange={handleCollegeChange}
+                            >
+                                {colleges.map((college) => (
+                                    <Option key={college} value={college}>
+                                        {college}
+                                    </Option>
+                                ))}
+                            </Select>
                         </Form.Item>
+
+                        {showOtherCollege && (
+                            <Form.Item
+                                name="collegeName"
+                                label={<span className="text-slate-300 font-medium">Enter Institution Name</span>}
+                                rules={[{ required: true, message: 'Please enter your college name' }]}
+                            >
+                                <Input
+                                    prefix={<BankOutlined className="text-slate-500 mr-2" />}
+                                    placeholder="e.g. Indian Institute of Technology"
+                                    className="!h-12 !rounded-xl"
+                                />
+                            </Form.Item>
+                        )}
+
+                        {!showOtherCollege && (
+                            <Form.Item
+                                name="collegeName"
+                                hidden
+                            >
+                                <Input />
+                            </Form.Item>
+                        )}
 
                         <Form.Item
                             name="role"
