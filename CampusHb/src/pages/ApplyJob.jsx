@@ -5,6 +5,7 @@ import { Card, Button, Typography, Form, Input, message, Divider, Tag, Space, Br
 import { ArrowLeftOutlined, SendOutlined, LinkOutlined, UserOutlined, MailOutlined, PhoneOutlined, IdcardOutlined, ProjectOutlined, BankOutlined, FileTextOutlined, PaperClipOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExperimentOutlined, CloudUploadOutlined, LoadingOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { getApiUrl } from '../config/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -37,7 +38,7 @@ const ApplyJob = () => {
     const fetchJobDetails = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`http://localhost:5000/api/jobs/${id}`, {
+            const res = await axios.get(getApiUrl(`jobs/${id}`), {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setJob(res.data);
@@ -72,7 +73,7 @@ const ApplyJob = () => {
                 formData.append('resume', cvFile);
             }
 
-            await axios.post('http://localhost:5000/api/applications/submit', formData, {
+            await axios.post(getApiUrl('applications/submit'), formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -116,7 +117,7 @@ const ApplyJob = () => {
                 formData.append('jobId', id);
                 formData.append('resume', file);
 
-                await axios.post('http://localhost:5000/api/applications/upload-single-cv', formData, {
+                await axios.post(getApiUrl('applications/upload-single-cv'), formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data'

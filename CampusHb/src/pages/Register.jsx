@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Form, Input, Button, Typography, message, Card, Select, Divider } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined, BankOutlined, SecurityScanOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import { getApiUrl } from '../config/api';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -39,7 +40,7 @@ const Register = () => {
     const onFinish = async (values) => {
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/register', values);
+            const res = await axios.post(getApiUrl('auth/register'), values);
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
             message.success('Account created successfully! Welcome to CampusHB.');

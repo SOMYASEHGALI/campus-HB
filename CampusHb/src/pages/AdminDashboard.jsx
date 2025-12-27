@@ -4,6 +4,7 @@ import { Form, Input, Button, Typography, message, Card, Table, Tag, Space, Moda
 import { PlusOutlined, DeleteOutlined, DownloadOutlined, RocketOutlined, GlobalOutlined, DollarOutlined, ExperimentOutlined, BankOutlined, TeamOutlined, FileTextOutlined, EyeOutlined, CloudUploadOutlined, UserOutlined, StopOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs } from 'antd';
+import { getApiUrl, getUploadUrl } from '../config/api';
 
 const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -31,7 +32,7 @@ const AdminDashboard = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/jobs', {
+            const res = await axios.get(getApiUrl('jobs'), {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setJobs(res.data);
@@ -45,7 +46,7 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/applications/admin/stats', {
+            const res = await axios.get(getApiUrl('applications/admin/stats'), {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setColleges(res.data.colleges);
@@ -58,7 +59,7 @@ const AdminDashboard = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/users', {
+            const res = await axios.get(getApiUrl('users'), {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUsers(res.data);
@@ -72,7 +73,7 @@ const AdminDashboard = () => {
         try {
             console.log('[Frontend] Toggling user status:', { userId, currentStatus });
             const token = localStorage.getItem('token');
-            const response = await axios.patch(`http://localhost:5000/api/users/${userId}/toggle-status`, {}, {
+            const response = await axios.patch(getApiUrl(`users/${userId}/toggle-status`), {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             console.log('[Frontend] Toggle response:', response.data);
@@ -96,7 +97,7 @@ const AdminDashboard = () => {
             onOk: async () => {
                 try {
                     const token = localStorage.getItem('token');
-                    await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+                    await axios.delete(getApiUrl(`users/${userId}`), {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     message.success('User deleted successfully');
@@ -112,7 +113,7 @@ const AdminDashboard = () => {
     const handlePostJob = async (values) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:5000/api/jobs', {
+            await axios.post(getApiUrl('jobs'), {
                 ...values,
                 skills: values.skills ? values.skills.split(',').map(s => s.trim()) : []
             }, {
@@ -139,7 +140,7 @@ const AdminDashboard = () => {
             onOk: async () => {
                 try {
                     const token = localStorage.getItem('token');
-                    await axios.delete(`http://localhost:5000/api/jobs/${jobId}`, {
+                    await axios.delete(getApiUrl(`jobs/${jobId}`), {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     message.success('Job and associations deleted successfully');
@@ -154,12 +155,12 @@ const AdminDashboard = () => {
 
     const handleExport = (jobId) => {
         const token = localStorage.getItem('token');
-        window.open(`http://localhost:5000/api/applications/export/${jobId}?token=${token}`, '_blank');
+        window.open(getApiUrl(`applications/export/${jobId}?token=${token}`), '_blank');
     };
 
     const handleExportAll = () => {
         const token = localStorage.getItem('token');
-        window.open(`http://localhost:5000/api/applications/export-all?token=${token}`, '_blank');
+        window.open(getApiUrl(`applications/export-all?token=${token}`), '_blank');
     };
 
     const handleExportByCollege = (collegeName) => {
@@ -168,13 +169,13 @@ const AdminDashboard = () => {
             return;
         }
         const token = localStorage.getItem('token');
-        window.open(`http://localhost:5000/api/applications/export-by-college/${encodeURIComponent(collegeName)}?token=${token}`, '_blank');
+        window.open(getApiUrl(`applications/export-by-college/${encodeURIComponent(collegeName)}?token=${token}`), '_blank');
     };
 
     const getFullUrl = (url) => {
         if (!url) return '';
         if (url.startsWith('http')) return url;
-        return `http://localhost:5000${url}`;
+        return getUploadUrl(url);
     };
 
     const columns = [

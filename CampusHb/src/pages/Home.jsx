@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Card, Button, Tag, Typography, Skeleton, Empty, Badge, Modal, Input, message } from 'antd';
 import { EnvironmentOutlined, DollarOutlined, ExperimentOutlined, ArrowRightOutlined, RocketOutlined, TeamOutlined, TrophyOutlined, SafetyOutlined, ThunderboltOutlined, StarOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import { getApiUrl } from '../config/api';
 
 const { Title, Text } = Typography;
 
@@ -21,7 +22,7 @@ const Home = () => {
     const fetchJobs = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/jobs', {
+            const res = await axios.get(getApiUrl('jobs'), {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setJobs(res.data);

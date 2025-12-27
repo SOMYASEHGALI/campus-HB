@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography, message, Card } from 'antd';
 import { SecurityScanOutlined, ArrowRightOutlined, LockOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import { getApiUrl } from '../config/api';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -14,7 +15,7 @@ const AdminLogin = () => {
     const onFinish = async (values) => {
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/admin-login', values);
+            const res = await axios.post(getApiUrl('auth/admin-login'), values);
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
             message.success('Master Admin Access Granted!');
