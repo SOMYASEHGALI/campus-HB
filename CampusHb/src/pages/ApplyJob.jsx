@@ -26,10 +26,12 @@ const ApplyJob = () => {
     const [currentFileIndex, setCurrentFileIndex] = useState(-1);
     const [submissionType, setSubmissionType] = useState('link'); // 'link' or 'file'
     const [cvFile, setCvFile] = useState(null);
+    const [cvUploading, setCvUploading] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
 
     const sheetInputRef = React.useRef(null);
-    const resumeInputRef = React.useRef(null);
+    const resumeInputRef = React.useRef(null); // For staff bulk uploads
+    const studentCvInputRef = React.useRef(null); // For student single CV upload
 
     useEffect(() => {
         fetchJobDetails();
@@ -46,6 +48,43 @@ const ApplyJob = () => {
         } catch (err) {
             message.error('Job details not found');
             navigate('/');
+        }
+    };
+
+    const handleStudentCvUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Validate file type
+        const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (!validTypes.includes(file.type)) {
+            toast.error('Please upload only PDF, DOC, or DOCX files');
+            e.target.value = '';
+            return;
+        }
+
+        setCvUploading(true);
+        const toastId = toast.info(`📄 Uploading: ${file.name}...`, { autoClose: false });
+
+        try {
+            // Simulate upload progress (you can replace this with actual upload progress)
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            setCvFile(file);
+            toast.update(toastId, {
+                render: `✅ ${file.name} ready for submission`,
+                type: 'success',
+                autoClose: 3000
+            });
+        } catch (err) {
+            toast.update(toastId, {
+                render: `❌ Upload failed: ${file.name}`,
+                type: 'error',
+                autoClose: 3000
+            });
+        } finally {
+            setCvUploading(false);
+            e.target.value = ''; // Reset input to allow re-selection of same file
         }
     };
 
@@ -490,26 +529,45 @@ const ApplyJob = () => {
                                         <div className="space-y-4">
                                             <Text className="text-slate-300 font-bold block mb-2">Upload Professional CV (PDF Only)</Text>
                                             <div
-                                                onClick={() => !cvFile && resumeInputRef.current?.click()}
-                                                className={`h-32 border-2 border-dashed rounded-[2rem] flex flex-col items-center justify-center transition-all cursor-pointer ${cvFile ? 'border-green-500/30 bg-green-500/5' : 'border-white/10 hover:border-indigo-500/30 bg-slate-900/30'}`}
+                                                onClick={() => !cvFile && !cvUploading && studentCvInputRef.current?.click()}
+                                                className={`h-32 border-2 border-dashed rounded-[2rem] flex flex-col items-center justify-center transition-all ${cvFile ? 'border-green-500/30 bg-green-500/5' :
+                                                    cvUploading ? 'border-cyan-500/30 bg-cyan-500/5' :
+                                                        'border-white/10 hover:border-indigo-500/30 bg-slate-900/30 cursor-pointer'
+                                                    }`}
                                             >
                                                 <input
                                                     type="file"
-                                                    ref={resumeInputRef}
+                                                    ref={studentCvInputRef}
                                                     className="hidden"
                                                     accept=".pdf,.doc,.docx"
-                                                    onChange={(e) => setCvFile(e.target.files[0])}
+                                                    onChange={handleStudentCvUpload}
                                                 />
-                                                {cvFile ? (
+                                                {cvUploading ? (
+                                                    <div className="flex flex-col items-center">
+                                                        <LoadingOutlined className="text-3xl text-cyan-500 mb-2" />
+                                                        <Text className="text-cyan-400 font-medium">Uploading...</Text>
+                                                    </div>
+                                                ) : cvFile ? (
                                                     <div className="flex flex-col items-center">
                                                         <CheckCircleOutlined className="text-2xl text-green-500 mb-2" />
                                                         <Text className="text-white font-medium">{cvFile.name}</Text>
-                                                        <Button type="link" danger onClick={(e) => { e.stopPropagation(); setCvFile(null); }}>Remove File</Button>
+                                                        <Button
+                                                            type="link"
+                                                            danger
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setCvFile(null);
+                                                                toast.info('📄 File removed. You can upload a new one.');
+                                                            }}
+                                                        >
+                                                            Remove File
+                                                        </Button>
                                                     </div>
                                                 ) : (
                                                     <>
                                                         <CloudUploadOutlined className="text-3xl text-slate-600 mb-2" />
-                                                        <Text className="text-slate-500">Click to select or drag and drop CV file</Text>
+                                                        <Text className="text-slate-500">Click to select CV file</Text>
+                                                        <Text className="text-slate-600 text-xs mt-1">PDF, DOC, or DOCX</Text>
                                                     </>
                                                 )}
                                             </div>
