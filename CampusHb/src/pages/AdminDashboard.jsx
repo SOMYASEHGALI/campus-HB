@@ -21,6 +21,8 @@ const AdminDashboard = () => {
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [selectedApp, setSelectedApp] = useState(null);
     const [bulkFilter, setBulkFilter] = useState('all');
+    const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
+    const [selectedPdfUrl, setSelectedPdfUrl] = useState(null);
 
     useEffect(() => {
         fetchJobs();
@@ -207,7 +209,7 @@ const AdminDashboard = () => {
             render: (colleges) => (
                 <div className="flex flex-wrap gap-1 max-w-[200px]">
                     {colleges?.map(college => (
-                        <Tag key={college} color="purple" className="!rounded-md border-purple-500/30 !bg-purple-500/10 !text-purple-300 text-[10px] m-0">
+                        <Tag key={college} color="purple" className="!rounded-md border-violet-500/30 !bg-violet-500/10 !text-violet-300 text-[10px] m-0">
                             {college}
                         </Tag>
                     ))}
@@ -228,7 +230,7 @@ const AdminDashboard = () => {
                         <Button
                             icon={<DownloadOutlined />}
                             onClick={() => handleExport(record._id)}
-                            className="!bg-indigo-600/20 !text-indigo-400 !border-indigo-500/30 hover:!bg-indigo-600 hover:!text-white transition-all"
+                            className="!bg-violet-600/20 !text-violet-400 !border-violet-500/30 hover:!bg-violet-600 hover:!text-white transition-all"
                         />
                     </Tooltip>
                     <Tooltip title="Delete Opening">
@@ -362,7 +364,10 @@ const AdminDashboard = () => {
                     {record.resumeUrl && (
                         <Button
                             icon={<FileTextOutlined />}
-                            onClick={() => window.open(getFullUrl(record.resumeUrl), '_blank')}
+                            onClick={() => {
+                                setSelectedPdfUrl(getFullUrl(record.resumeUrl));
+                                setIsPdfViewerOpen(true);
+                            }}
                             className="!bg-amber-600/20 !text-amber-400 !border-amber-500/30 hover:!bg-amber-600 hover:!text-white transition-all rounded-lg"
                         >
                             Open CV
@@ -547,17 +552,19 @@ const AdminDashboard = () => {
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6 bg-slate-800/40 p-8 rounded-[2rem] border border-white/5"
+                className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6 bg-[#0f111a] p-8 rounded-[2rem] border border-violet-500/20 shadow-2xl shadow-violet-900/10"
             >
                 <div>
-                    <Title level={1} className="!text-white !m-0 !font-black !text-4xl">Command Center</Title>
+                    <Title level={1} className="!text-white !m-0 !font-black !text-4xl tracking-tight">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Command</span> Center
+                    </Title>
                     <Paragraph className="text-slate-400 mt-2 mb-0">Global administrator panel for managing enterprise recruitment across all partner colleges.</Paragraph>
                 </div>
                 <div className="flex gap-4">
                     <Button
                         size="large"
-                        icon={<RocketOutlined className="animate-pulse text-indigo-400" />}
-                        className="!h-14 px-8 !rounded-2xl !text-lg !font-bold !bg-indigo-600/10 !text-indigo-400 !border-indigo-500/20"
+                        icon={<RocketOutlined className="animate-pulse text-violet-400" />}
+                        className="!h-14 px-8 !rounded-2xl !text-lg !font-bold !bg-violet-600/10 !text-violet-400 !border-violet-500/20 hover:!bg-violet-600/20 hover:!border-violet-500/40"
                         onClick={() => {
                             fetchJobs();
                             fetchStats();
@@ -565,24 +572,24 @@ const AdminDashboard = () => {
                             message.success('System synchronization successful');
                         }}
                     >
-                        Sync Enterprise Data
+                        Sync Data
                     </Button>
                     <Button
                         size="large"
                         icon={<DownloadOutlined />}
-                        className="!h-14 px-8 !rounded-2xl !text-lg !font-bold !bg-slate-700 !text-white !border-none"
+                        className="!h-14 px-8 !rounded-2xl !text-lg !font-bold !bg-[#1a1d2d] !text-white !border-white/10 hover:!bg-[#252a40]"
                         onClick={handleExportAll}
                     >
-                        Export Master File
+                        Master File
                     </Button>
                     <Button
                         type="primary"
                         size="large"
                         icon={<PlusOutlined />}
-                        className="!h-14 px-8 !rounded-2xl !text-lg !font-bold"
+                        className="!h-14 px-8 !rounded-2xl !text-lg !font-bold !bg-gradient-to-r !from-violet-600 !to-fuchsia-600 !border-none hover:!from-violet-500 hover:!to-fuchsia-500 shadow-lg shadow-violet-600/20"
                         onClick={() => setIsModalOpen(true)}
                     >
-                        Create New Opening
+                        New Opening
                     </Button>
                 </div>
             </motion.div>
@@ -712,7 +719,10 @@ const AdminDashboard = () => {
                                                                             size="small"
                                                                             type="primary"
                                                                             icon={<FileTextOutlined className="!text-[10px]" />}
-                                                                            onClick={() => window.open(getFullUrl(student.resumeUrl), '_blank')}
+                                                                            onClick={() => {
+                                                                                setSelectedPdfUrl(getFullUrl(student.resumeUrl));
+                                                                                setIsPdfViewerOpen(true);
+                                                                            }}
                                                                             className="!text-[10px] !bg-indigo-600 !border-none rounded-lg h-9 px-4"
                                                                         >
                                                                             Preview
@@ -887,91 +897,182 @@ const AdminDashboard = () => {
 
             {/* Student Profile Modal */}
             <Modal
-                title={<Title level={3} className="!text-white !m-0">Candidate Profile</Title>}
+                title={null}
                 open={isProfileModalOpen}
                 onCancel={() => setIsProfileModalOpen(false)}
                 footer={null}
-                width={600}
+                width={700}
                 className="admin-modal"
                 centered
+                bodyStyle={{ padding: 0, overflow: 'hidden', borderRadius: '2rem' }}
             >
                 {selectedApp && (
-                    <div className="py-6">
-                        <div className="flex items-center gap-6 mb-8 p-6 bg-slate-900/50 rounded-[2rem] border border-white/5">
-                            <div className="w-20 h-20 rounded-2xl bg-indigo-600 flex items-center justify-center text-3xl font-bold text-white shadow-xl shadow-indigo-500/20">
-                                {selectedApp.studentName.charAt(0)}
-                            </div>
-                            <div>
-                                <Title level={2} className="!text-white !m-0">{selectedApp.studentName}</Title>
-                                <Tag color="blue" className="!rounded-full px-3 mt-1">{selectedApp.studentId?.collegeName || 'N/A'}</Tag>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-6 mb-8">
-                            <div className="glass-card p-4 !bg-slate-800/40">
-                                <Text className="text-slate-500 block text-xs uppercase font-bold mb-1">Email Address</Text>
-                                <Text className="text-slate-200 font-medium">{selectedApp.email}</Text>
-                            </div>
-                            <div className="glass-card p-4 !bg-slate-800/40">
-                                <Text className="text-slate-500 block text-xs uppercase font-bold mb-1">Phone Number</Text>
-                                <Text className="text-slate-200 font-medium">{selectedApp.phone}</Text>
-                            </div>
-                            <div className="glass-card p-4 !bg-slate-800/40">
-                                <Text className="text-slate-500 block text-xs uppercase font-bold mb-1">Roll / UID Number</Text>
-                                <Text className="text-slate-200 font-medium">{selectedApp.rollNumber || 'Not Provided'}</Text>
-                            </div>
-                            <div className="glass-card p-4 !bg-slate-800/40">
-                                <Text className="text-slate-500 block text-xs uppercase font-bold mb-1">Target Application</Text>
-                                <Text className="text-indigo-400 font-bold">{selectedApp.jobId?.title}</Text>
+                    <div className="bg-[#0f111a]">
+                        <div className="relative bg-gradient-to-br from-violet-900 to-[#0f111a] p-8 pb-12">
+                            <div className="absolute top-0 right-0 p-32 bg-fuchsia-500/10 blur-[100px] rounded-full mix-blend-screen pointer-events-none" />
+                            <div className="relative flex flex-col items-center justify-center text-center">
+                                <div className="w-24 h-24 mb-4 rounded-3xl bg-gradient-to-br from-violet-500 to-fuchsia-500 p-[2px] shadow-2xl shadow-violet-500/30">
+                                    <div className="w-full h-full rounded-[22px] bg-[#1a1d2d] flex items-center justify-center text-4xl font-black text-white">
+                                        {selectedApp.studentName.charAt(0)}
+                                    </div>
+                                </div>
+                                <Title level={2} className="!text-white !m-0 !text-3xl tracking-tight">{selectedApp.studentName}</Title>
+                                <div className="flex items-center gap-2 mt-2">
+                                    <Tag className="!bg-violet-500/20 !text-violet-200 !border-violet-500/30 !rounded-full px-4 py-1 m-0 text-sm font-semibold">
+                                        {selectedApp.studentId?.collegeName || 'N/A'}
+                                    </Tag>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="space-y-4">
-                            <Button
-                                type="primary"
-                                block
-                                size="large"
-                                icon={<FileTextOutlined />}
-                                className="!h-14 !rounded-2xl shadow-lg !bg-indigo-600 hover:!bg-indigo-700"
-                                onClick={() => window.open(getFullUrl(selectedApp.resumeUrl), '_blank')}
-                            >
-                                View CV in Browser
-                            </Button>
-                            <Button
-                                block
-                                size="large"
-                                icon={<DownloadOutlined />}
-                                className="!h-14 !rounded-2xl !bg-amber-600/10 !text-amber-500 !border-amber-500/30 hover:!bg-amber-600 hover:!text-white transition-all shadow-lg"
-                                onClick={async () => {
-                                    try {
-                                        const response = await fetch(getFullUrl(selectedApp.resumeUrl));
-                                        const blob = await response.blob();
-                                        const url = window.URL.createObjectURL(blob);
-                                        const link = document.createElement('a');
-                                        link.href = url;
-                                        link.setAttribute('download', `${selectedApp.studentName}_CV.pdf`);
-                                        document.body.appendChild(link);
-                                        link.click();
-                                        link.parentNode.removeChild(link);
-                                        message.success('Download initiated');
-                                    } catch (error) {
-                                        window.open(getFullUrl(selectedApp.resumeUrl), '_blank');
-                                        message.info('Opening in browser (direct download restricted by provider)');
-                                    }
-                                }}
-                            >
-                                Download Professional CV
-                            </Button>
-                            <Button
-                                block
-                                size="large"
-                                className="!h-14 !rounded-2xl !bg-slate-700 !text-white !border-none"
-                                onClick={() => setIsProfileModalOpen(false)}
-                            >
-                                Close Profile
-                            </Button>
+                        <div className="px-8 -mt-8 pb-8 relative z-10">
+                            <div className="bg-[#1a1d2d]/80 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-xl">
+                                <div className="grid grid-cols-2 gap-6 mb-8">
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
+                                        <Text className="text-violet-400 block text-xs uppercase font-bold mb-1 tracking-wider">Email Address</Text>
+                                        <Text className="text-slate-200 font-medium group-hover:text-white transition-colors">{selectedApp.email}</Text>
+                                    </div>
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
+                                        <Text className="text-violet-400 block text-xs uppercase font-bold mb-1 tracking-wider">Phone Number</Text>
+                                        <Text className="text-slate-200 font-medium group-hover:text-white transition-colors">{selectedApp.phone}</Text>
+                                    </div>
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
+                                        <Text className="text-violet-400 block text-xs uppercase font-bold mb-1 tracking-wider">Roll / UID</Text>
+                                        <Text className="text-slate-200 font-medium group-hover:text-white transition-colors">{selectedApp.rollNumber || 'Not Provided'}</Text>
+                                    </div>
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group">
+                                        <Text className="text-violet-400 block text-xs uppercase font-bold mb-1 tracking-wider">Applied Position</Text>
+                                        <Text className="text-white font-bold text-lg">{selectedApp.jobId?.title}</Text>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3">
+                                    <Button
+                                        type="primary"
+                                        block
+                                        size="large"
+                                        icon={<FileTextOutlined />}
+                                        className="!h-14 !rounded-xl !bg-violet-600 hover:!bg-violet-500 !text-lg !font-bold shadow-lg shadow-violet-500/20 !border-none"
+                                        onClick={() => {
+                                            setSelectedPdfUrl(getFullUrl(selectedApp.resumeUrl));
+                                            setIsPdfViewerOpen(true);
+                                        }}
+                                    >
+                                        View Resume
+                                    </Button>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <Button
+                                            block
+                                            size="large"
+                                            icon={<DownloadOutlined />}
+                                            className="!h-14 !rounded-xl !bg-[#252a40] !text-violet-300 !border-white/5 hover:!bg-[#2f3550] hover:!text-white font-bold"
+                                            onClick={async () => {
+                                                try {
+                                                    const response = await fetch(getFullUrl(selectedApp.resumeUrl));
+                                                    const blob = await response.blob();
+                                                    const url = window.URL.createObjectURL(blob);
+                                                    const link = document.createElement('a');
+                                                    link.href = url;
+                                                    link.setAttribute('download', `${selectedApp.studentName}_CV.pdf`);
+                                                    document.body.appendChild(link);
+                                                    link.click();
+                                                    link.parentNode.removeChild(link);
+                                                    message.success('Download initiated');
+                                                } catch (error) {
+                                                    window.open(getFullUrl(selectedApp.resumeUrl), '_blank');
+                                                    message.info('Opening in browser');
+                                                }
+                                            }}
+                                        >
+                                            Download
+                                        </Button>
+                                        <Button
+                                            block
+                                            size="large"
+                                            className="!h-14 !rounded-xl !bg-transparent !text-slate-400 !border-white/10 hover:!text-white hover:!border-white/20 font-bold"
+                                            onClick={() => setIsProfileModalOpen(false)}
+                                        >
+                                            Close
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                )}
+            </Modal>
+
+            {/* PDF Viewer Modal - College Portal Style */}
+            <Modal
+                title={
+                    <div className="flex items-center gap-3 text-slate-100 text-xl font-bold tracking-tight">
+                        <FileTextOutlined className="text-indigo-400 text-2xl" />
+                        <span>CV Preview</span>
+                    </div>
+                }
+                open={isPdfViewerOpen}
+                onCancel={() => {
+                    setIsPdfViewerOpen(false);
+                    setSelectedPdfUrl(null);
+                }}
+                footer={[
+                    <Button
+                        key="download"
+                        size="large"
+                        icon={<DownloadOutlined />}
+                        className="!bg-amber-600 !text-white !border-none hover:!bg-amber-500 transition-all rounded-lg !font-semibold shadow-lg"
+                        onClick={async () => {
+                            try {
+                                const link = document.createElement('a');
+                                link.href = selectedPdfUrl;
+                                link.download = 'CV.pdf';
+                                link.target = '_blank';
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                                message.success('Download started');
+                            } catch (error) {
+                                window.open(selectedPdfUrl, '_blank');
+                            }
+                        }}
+                    >
+                        Download PDF
+                    </Button>,
+                    <Button
+                        key="close"
+                        size="large"
+                        onClick={() => {
+                            setIsPdfViewerOpen(false);
+                            setSelectedPdfUrl(null);
+                        }}
+                        className="!bg-slate-700 !text-white !border-none hover:!bg-slate-600 transition-all rounded-lg !font-semibold shadow-lg"
+                    >
+                        Close
+                    </Button>
+                ]}
+                width="95%"
+                style={{ top: 10, maxWidth: '1400px' }}
+                bodyStyle={{
+                    padding: 0,
+                    height: 'calc(100vh - 150px)',
+                    minHeight: '600px',
+                    background: '#0f172a'
+                }}
+                className="pdf-viewer-modal"
+                centered
+            >
+                {selectedPdfUrl && (
+                    <iframe
+                        src={selectedPdfUrl}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            border: 'none',
+                            display: 'block'
+                        }}
+                        title="PDF Viewer"
+                    />
                 )}
             </Modal>
         </div>

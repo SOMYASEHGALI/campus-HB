@@ -401,9 +401,11 @@ router.get('/download-cv/:filename', (req, res) => {
     try {
         const filePath = path.join(__dirname, '../uploads', req.params.filename);
         if (fs.existsSync(filePath)) {
-            // Set headers for individual file download
-            res.download(filePath, (err) => {
-                if (err) console.error('Download Transfer Error:', err);
+            // Set headers to display PDF inline in browser (like Google Drive)
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'inline; filename="' + req.params.filename + '"');
+            res.sendFile(filePath, (err) => {
+                if (err) console.error('File Transfer Error:', err);
             });
         } else {
             res.status(404).send('File not found on storage');

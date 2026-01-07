@@ -112,3 +112,50 @@ body {
 .custom-tabs .ant-tabs-ink-bar {
   background: #818cf8 !important;
 }
+
+/* PDF Viewer Modal - College Portal Style */
+.pdf-viewer-modal .ant-modal-content {
+  background: #1e293b !important;
+  border-radius: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+  overflow: hidden;
+  max-height: 95vh;
+}
+
+.pdf-viewer-modal .ant-modal-header {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2) !important;
+  padding: 16px 24px !important;
+  border-radius: 1rem 1rem 0 0 !important;
+}
+
+.pdf-viewer-modal .ant-modal-close {
+  color: rgba(255, 255, 255, 0.7) !important;
+  top: 16px !important;
+  right: 24px !important;
+  transition: all 0.3s ease;
+}
+
+.pdf-viewer-modal .ant-modal-close:hover {
+  color: #818cf8 !important;
+  transform: rotate(90deg);
+}
+
+.pdf-viewer-modal .ant-modal-body {
+  background: #0f172a !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.pdf-viewer-modal .ant-modal-footer {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  border-top: 1px solid rgba(99, 102, 241, 0.2) !important;
+  padding: 16px 24px !important;
+  border-radius: 0 0 1rem 1rem !important;
+}
+
+.pdf-viewer-modal iframe {
+  display: block;
+  background: white;
+}
