@@ -11,6 +11,210 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const { Title, Text, Paragraph } = Typography;
 
+// Drag & Drop File Uploader Component
+const DragDropUploader = ({ cvFile, cvUploading, studentCvInputRef, handleStudentCvUpload, setCvFile }) => {
+    const [isDragging, setIsDragging] = useState(false);
+
+    const handleDragEnter = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+            const file = files[0];
+
+            // Validate file type
+            const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            if (!validTypes.includes(file.type)) {
+                toast.error('Please upload only PDF, DOC, or DOCX files');
+                return;
+            }
+
+            // Create a synthetic event to pass to handleStudentCvUpload
+            const syntheticEvent = {
+                target: {
+                    files: [file],
+                    value: ''
+                }
+            };
+            handleStudentCvUpload(syntheticEvent);
+        }
+    };
+
+    return (
+        <div className="p-6 bg-slate-900/30 rounded-2xl border border-white/5">
+            <Text className="text-slate-300 font-semibold block mb-4">Upload Your Resume</Text>
+
+            <div
+                onDragEnter={handleDragEnter}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => !cvFile && !cvUploading && studentCvInputRef.current?.click()}
+                className={`relative h-48 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all duration-300 ${cvFile
+                        ? 'border-green-500/40 bg-gradient-to-br from-green-500/10 to-emerald-500/5'
+                        : cvUploading
+                            ? 'border-cyan-500/40 bg-gradient-to-br from-cyan-500/10 to-blue-500/5'
+                            : isDragging
+                                ? 'border-indigo-500/60 bg-gradient-to-br from-indigo-500/20 to-purple-500/10 scale-[1.02]'
+                                : 'border-white/10 hover:border-indigo-500/40 bg-slate-800/30 cursor-pointer hover:bg-slate-800/50'
+                    }`}
+            >
+                <input
+                    type="file"
+                    ref={studentCvInputRef}
+                    className="hidden"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleStudentCvUpload}
+                />
+
+                <AnimatePresence mode="wait">
+                    {cvUploading ? (
+                        <motion.div
+                            key="uploading"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            className="flex flex-col items-center"
+                        >
+                            <div className="relative">
+                                <div className="w-16 h-16 rounded-full bg-cyan-500/20 flex items-center justify-center mb-4">
+                                    <LoadingOutlined className="text-4xl text-cyan-400 animate-spin" />
+                                </div>
+                                <div className="absolute inset-0 rounded-full bg-cyan-500/20 animate-ping"></div>
+                            </div>
+                            <Text className="text-cyan-400 font-semibold text-lg">Uploading...</Text>
+                            <Text className="text-slate-500 text-sm mt-1">Please wait</Text>
+                        </motion.div>
+                    ) : cvFile ? (
+                        <motion.div
+                            key="success"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            className="flex flex-col items-center w-full px-6"
+                        >
+                            <div className="relative mb-4">
+                                <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center">
+                                    <CheckCircleOutlined className="text-4xl text-green-400" />
+                                </div>
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: [0, 1.2, 1] }}
+                                    transition={{ duration: 0.5 }}
+                                    className="absolute inset-0 rounded-full border-2 border-green-500/30"
+                                ></motion.div>
+                            </div>
+                            <Text className="text-white font-semibold text-lg mb-1">File Ready!</Text>
+                            <Text className="text-slate-400 text-sm mb-4 truncate max-w-full">{cvFile.name}</Text>
+                            <div className="flex gap-3">
+                                <Button
+                                    type="primary"
+                                    size="small"
+                                    className="!bg-green-600 !border-none !rounded-lg"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        // File is ready, no action needed
+                                    }}
+                                >
+                                    ✓ Selected
+                                </Button>
+                                <Button
+                                    danger
+                                    size="small"
+                                    className="!rounded-lg"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setCvFile(null);
+                                        toast.info('📄 File removed. You can upload a new one.');
+                                    }}
+                                >
+                                    Remove
+                                </Button>
+                            </div>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="idle"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            className="flex flex-col items-center"
+                        >
+                            <motion.div
+                                animate={{
+                                    y: isDragging ? -10 : [0, -8, 0],
+                                }}
+                                transition={{
+                                    duration: isDragging ? 0.3 : 2,
+                                    repeat: isDragging ? 0 : Infinity,
+                                    ease: "easeInOut"
+                                }}
+                                className="mb-4"
+                            >
+                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all ${isDragging
+                                        ? 'bg-gradient-to-br from-indigo-600 to-purple-600 shadow-lg shadow-indigo-500/50'
+                                        : 'bg-slate-700/50'
+                                    }`}>
+                                    <CloudUploadOutlined className={`text-4xl transition-colors ${isDragging ? 'text-white' : 'text-slate-400'
+                                        }`} />
+                                </div>
+                            </motion.div>
+                            <Text className={`font-semibold text-lg mb-2 transition-colors ${isDragging ? 'text-indigo-400' : 'text-slate-300'
+                                }`}>
+                                {isDragging ? 'Drop your file here' : 'Drag & drop your CV'}
+                            </Text>
+                            <Text className="text-slate-500 text-sm mb-3">or click to browse</Text>
+                            <div className="flex gap-2">
+                                <Tag className="!bg-slate-700/50 !border-slate-600 !text-slate-400 !rounded-lg">PDF</Tag>
+                                <Tag className="!bg-slate-700/50 !border-slate-600 !text-slate-400 !rounded-lg">DOC</Tag>
+                                <Tag className="!bg-slate-700/50 !border-slate-600 !text-slate-400 !rounded-lg">DOCX</Tag>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Animated border effect when dragging */}
+                {isDragging && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="absolute inset-0 rounded-2xl border-2 border-indigo-500 pointer-events-none"
+                        style={{
+                            background: 'linear-gradient(45deg, transparent 30%, rgba(99, 102, 241, 0.1) 50%, transparent 70%)',
+                            backgroundSize: '200% 200%',
+                            animation: 'gradient 2s ease infinite'
+                        }}
+                    ></motion.div>
+                )}
+            </div>
+
+            <Text className="text-slate-500 text-xs mt-3 block text-center">
+                Maximum file size: 10MB
+            </Text>
+        </div>
+    );
+};
+
+
 const ApplyJob = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -480,113 +684,209 @@ const ApplyJob = () => {
                                 requiredMark={false}
                                 className="relative z-10"
                             >
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
-                                    <Form.Item name="studentName" label={<span className="text-slate-300 font-bold">Full Legal Name</span>} rules={[{ required: true }]}>
-                                        <Input prefix={<UserOutlined className="text-slate-500 mr-2" />} placeholder="e.g. Rahul Sharma" className="!h-14 !rounded-2xl" />
-                                    </Form.Item>
+                                {/* Personal Information Section */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="mb-10"
+                                >
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center">
+                                            <UserOutlined className="text-white text-lg" />
+                                        </div>
+                                        <div>
+                                            <Title level={4} className="!text-white !m-0 !font-bold">Personal Information</Title>
+                                            <Text className="text-slate-500 text-xs">Enter your basic details</Text>
+                                        </div>
+                                    </div>
 
-                                    <Form.Item name="email" label={<span className="text-slate-300 font-bold">University Email</span>} rules={[{ required: true, type: 'email' }]}>
-                                        <Input prefix={<MailOutlined className="text-slate-500 mr-2" />} placeholder="rahul@college.edu" className="!h-14 !rounded-2xl" />
-                                    </Form.Item>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-slate-900/30 rounded-2xl border border-white/5">
+                                        <Form.Item
+                                            name="studentName"
+                                            label={<span className="text-slate-300 font-semibold text-sm">Full Legal Name</span>}
+                                            rules={[{ required: true, message: 'Please enter your full name' }]}
+                                        >
+                                            <Input
+                                                prefix={<UserOutlined className="text-slate-500" />}
+                                                placeholder="e.g. Rahul Sharma"
+                                                className="!h-12 !rounded-xl !bg-slate-800/50 !border-white/10 hover:!border-indigo-500/50 focus:!border-indigo-500"
+                                            />
+                                        </Form.Item>
 
-                                    <Form.Item name="phone" label={<span className="text-slate-300 font-bold">Mobile Connectivity</span>} rules={[{ required: true }]}>
-                                        <Input prefix={<PhoneOutlined className="text-slate-500 mr-2" />} placeholder="+91 98765-43210" className="!h-14 !rounded-2xl" />
-                                    </Form.Item>
+                                        <Form.Item
+                                            name="email"
+                                            label={<span className="text-slate-300 font-semibold text-sm">University Email</span>}
+                                            rules={[
+                                                { required: true, message: 'Please enter your email' },
+                                                { type: 'email', message: 'Please enter a valid email' }
+                                            ]}
+                                        >
+                                            <Input
+                                                prefix={<MailOutlined className="text-slate-500" />}
+                                                placeholder="rahul@college.edu"
+                                                className="!h-12 !rounded-xl !bg-slate-800/50 !border-white/10 hover:!border-indigo-500/50 focus:!border-indigo-500"
+                                            />
+                                        </Form.Item>
 
-                                    <Form.Item name="rollNumber" label={<span className="text-slate-300 font-bold">Institutional UID / Roll No</span>}>
-                                        <Input prefix={<IdcardOutlined className="text-slate-500 mr-2" />} placeholder="CS-2024-512" className="!h-14 !rounded-2xl" />
-                                    </Form.Item>
-                                </div>
+                                        <Form.Item
+                                            name="phone"
+                                            label={<span className="text-slate-300 font-semibold text-sm">Mobile Number</span>}
+                                            rules={[{ required: true, message: 'Please enter your phone number' }]}
+                                        >
+                                            <Input
+                                                prefix={<PhoneOutlined className="text-slate-500" />}
+                                                placeholder="+91 98765-43210"
+                                                className="!h-12 !rounded-xl !bg-slate-800/50 !border-white/10 hover:!border-indigo-500/50 focus:!border-indigo-500"
+                                            />
+                                        </Form.Item>
 
-                                <div className="mb-8">
-                                    <div className="flex gap-4 mb-6 p-1 bg-slate-900/50 rounded-2xl border border-white/5 w-fit">
+                                        <Form.Item
+                                            name="rollNumber"
+                                            label={<span className="text-slate-300 font-semibold text-sm">Roll Number / Student ID</span>}
+                                        >
+                                            <Input
+                                                prefix={<IdcardOutlined className="text-slate-500" />}
+                                                placeholder="CS-2024-512"
+                                                className="!h-12 !rounded-xl !bg-slate-800/50 !border-white/10 hover:!border-indigo-500/50 focus:!border-indigo-500"
+                                            />
+                                        </Form.Item>
+                                    </div>
+                                </motion.div>
+
+                                {/* Resume Upload Section */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1 }}
+                                    className="mb-10"
+                                >
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center">
+                                            <FileTextOutlined className="text-white text-lg" />
+                                        </div>
+                                        <div>
+                                            <Title level={4} className="!text-white !m-0 !font-bold">Resume / CV</Title>
+                                            <Text className="text-slate-500 text-xs">Choose how you want to submit your resume</Text>
+                                        </div>
+                                    </div>
+
+                                    {/* Toggle Buttons */}
+                                    <div className="flex gap-3 mb-6 p-1.5 bg-slate-900/50 rounded-2xl border border-white/5 w-fit">
                                         <button
                                             type="button"
-                                            onClick={() => setSubmissionType('link')}
-                                            className={`px-6 py-2 rounded-xl transition-all font-bold text-sm ${submissionType === 'link' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                                            onClick={() => {
+                                                setSubmissionType('link');
+                                                setCvFile(null);
+                                            }}
+                                            className={`px-6 py-3 rounded-xl transition-all font-semibold text-sm flex items-center gap-2 ${submissionType === 'link'
+                                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
+                                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                                                }`}
                                         >
+                                            <LinkOutlined />
                                             Drive Link
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setSubmissionType('file')}
-                                            className={`px-6 py-2 rounded-xl transition-all font-bold text-sm ${submissionType === 'file' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                                            onClick={() => {
+                                                setSubmissionType('file');
+                                                form.setFieldsValue({ resumeUrl: undefined });
+                                            }}
+                                            className={`px-6 py-3 rounded-xl transition-all font-semibold text-sm flex items-center gap-2 ${submissionType === 'file'
+                                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
+                                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                                                }`}
                                         >
-                                            Upload PDF/CV
+                                            <CloudUploadOutlined />
+                                            Upload File
                                         </button>
                                     </div>
 
-                                    {submissionType === 'link' ? (
-                                        <Form.Item
-                                            name="resumeUrl"
-                                            label={<span className="text-slate-300 font-bold">Verified Portfolio/Resume Link</span>}
-                                            rules={[{ required: submissionType === 'link', type: 'url', message: 'Please enter a valid URL' }]}
-                                            extra={<Text className="text-slate-500 text-xs italic">Ensure link permissions are set to "Anyone with the link can view"</Text>}
-                                        >
-                                            <Input prefix={<LinkOutlined className="text-indigo-500 mr-2" />} placeholder="https://drive.google.com/your-resume-link" className="!h-14 !rounded-2xl !border-indigo-500/30" />
-                                        </Form.Item>
-                                    ) : (
-                                        <div className="space-y-4">
-                                            <Text className="text-slate-300 font-bold block mb-2">Upload Professional CV (PDF Only)</Text>
-                                            <div
-                                                onClick={() => !cvFile && !cvUploading && studentCvInputRef.current?.click()}
-                                                className={`h-32 border-2 border-dashed rounded-[2rem] flex flex-col items-center justify-center transition-all ${cvFile ? 'border-green-500/30 bg-green-500/5' :
-                                                    cvUploading ? 'border-cyan-500/30 bg-cyan-500/5' :
-                                                        'border-white/10 hover:border-indigo-500/30 bg-slate-900/30 cursor-pointer'
-                                                    }`}
+                                    {/* Content Based on Selection */}
+                                    <AnimatePresence mode="wait">
+                                        {submissionType === 'link' ? (
+                                            <motion.div
+                                                key="link"
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: 20 }}
+                                                transition={{ duration: 0.2 }}
                                             >
-                                                <input
-                                                    type="file"
-                                                    ref={studentCvInputRef}
-                                                    className="hidden"
-                                                    accept=".pdf,.doc,.docx"
-                                                    onChange={handleStudentCvUpload}
+                                                <Form.Item
+                                                    name="resumeUrl"
+                                                    rules={[
+                                                        { required: submissionType === 'link', message: 'Please enter your resume link' },
+                                                        { type: 'url', message: 'Please enter a valid URL' }
+                                                    ]}
+                                                >
+                                                    <div className="p-6 bg-slate-900/30 rounded-2xl border border-white/5">
+                                                        <Text className="text-slate-300 font-semibold block mb-3">Resume Link</Text>
+                                                        <Input
+                                                            prefix={<LinkOutlined className="text-indigo-400" />}
+                                                            placeholder="https://drive.google.com/your-resume-link"
+                                                            className="!h-14 !rounded-xl !bg-slate-800/50 !border-indigo-500/30 hover:!border-indigo-500/50 focus:!border-indigo-500 !text-base"
+                                                        />
+                                                        <Text className="text-slate-500 text-xs italic mt-2 block">
+                                                            💡 Make sure your link is publicly accessible
+                                                        </Text>
+                                                    </div>
+                                                </Form.Item>
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key="file"
+                                                initial={{ opacity: 0, x: 20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: -20 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                <DragDropUploader
+                                                    cvFile={cvFile}
+                                                    cvUploading={cvUploading}
+                                                    studentCvInputRef={studentCvInputRef}
+                                                    handleStudentCvUpload={handleStudentCvUpload}
+                                                    setCvFile={setCvFile}
                                                 />
-                                                {cvUploading ? (
-                                                    <div className="flex flex-col items-center">
-                                                        <LoadingOutlined className="text-3xl text-cyan-500 mb-2" />
-                                                        <Text className="text-cyan-400 font-medium">Uploading...</Text>
-                                                    </div>
-                                                ) : cvFile ? (
-                                                    <div className="flex flex-col items-center">
-                                                        <CheckCircleOutlined className="text-2xl text-green-500 mb-2" />
-                                                        <Text className="text-white font-medium">{cvFile.name}</Text>
-                                                        <Button
-                                                            type="link"
-                                                            danger
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setCvFile(null);
-                                                                toast.info('📄 File removed. You can upload a new one.');
-                                                            }}
-                                                        >
-                                                            Remove File
-                                                        </Button>
-                                                    </div>
-                                                ) : (
-                                                    <>
-                                                        <CloudUploadOutlined className="text-3xl text-slate-600 mb-2" />
-                                                        <Text className="text-slate-500">Click to select CV file</Text>
-                                                        <Text className="text-slate-600 text-xs mt-1">PDF, DOC, or DOCX</Text>
-                                                    </>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </motion.div>
 
-                                <Divider className="!border-white/5 my-10" />
-
-                                <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    loading={submitting}
-                                    block
-                                    className="!h-16 !rounded-2xl font-black text-xl shadow-2xl flex items-center justify-center gap-3 group overflow-hidden"
+                                {/* Submit Button */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 }}
                                 >
-                                    <span className="group-hover:translate-x-1 transition-transform">Authorize Contribution</span>
-                                    <SendOutlined className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
-                                </Button>
+                                    <Divider className="!border-white/5 my-8" />
+
+                                    <Button
+                                        type="primary"
+                                        htmlType="submit"
+                                        loading={submitting}
+                                        disabled={submissionType === 'file' && !cvFile}
+                                        block
+                                        size="large"
+                                        className="!h-16 !rounded-2xl font-bold text-lg !bg-gradient-to-r !from-indigo-600 !to-purple-600 hover:!from-indigo-500 hover:!to-purple-500 !border-none shadow-2xl shadow-indigo-500/30 flex items-center justify-center gap-3 group relative overflow-hidden"
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                                        <span className="relative flex items-center gap-3">
+                                            <SendOutlined className="text-xl group-hover:rotate-[-10deg] transition-transform" />
+                                            Submit Application
+                                            <motion.span
+                                                className="inline-block"
+                                                animate={{ x: [0, 5, 0] }}
+                                                transition={{ repeat: Infinity, duration: 1.5 }}
+                                            >
+                                                →
+                                            </motion.span>
+                                        </span>
+                                    </Button>
+
+                                    <Text className="text-slate-500 text-xs text-center block mt-4">
+                                        🔒 Your information is secure and will only be shared with the hiring team
+                                    </Text>
+                                </motion.div>
                             </Form>
                         )}
                     </Card>
