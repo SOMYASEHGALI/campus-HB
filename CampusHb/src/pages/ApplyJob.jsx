@@ -70,20 +70,22 @@ const DragDropUploader = ({ cvFile, cvUploading, studentCvInputRef, handleStuden
                 onDrop={handleDrop}
                 onClick={() => !cvFile && !cvUploading && studentCvInputRef.current?.click()}
                 className={`relative h-48 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all duration-300 ${cvFile
-                        ? 'border-green-500/40 bg-gradient-to-br from-green-500/10 to-emerald-500/5'
-                        : cvUploading
-                            ? 'border-cyan-500/40 bg-gradient-to-br from-cyan-500/10 to-blue-500/5'
-                            : isDragging
-                                ? 'border-indigo-500/60 bg-gradient-to-br from-indigo-500/20 to-purple-500/10 scale-[1.02]'
-                                : 'border-white/10 hover:border-indigo-500/40 bg-slate-800/30 cursor-pointer hover:bg-slate-800/50'
+                    ? 'border-green-500/40 bg-gradient-to-br from-green-500/10 to-emerald-500/5'
+                    : cvUploading
+                        ? 'border-cyan-500/40 bg-gradient-to-br from-cyan-500/10 to-blue-500/5'
+                        : isDragging
+                            ? 'border-indigo-500/60 bg-gradient-to-br from-indigo-500/20 to-purple-500/10 scale-[1.02]'
+                            : 'border-white/10 hover:border-indigo-500/40 bg-slate-800/30 cursor-pointer hover:bg-slate-800/50'
                     }`}
             >
                 <input
                     type="file"
                     ref={studentCvInputRef}
-                    className="hidden"
+                    className="absolute opacity-0 w-0 h-0 pointer-events-none"
                     accept=".pdf,.doc,.docx"
                     onChange={handleStudentCvUpload}
+                    tabIndex={-1}
+                    style={{ position: 'absolute', left: '-9999px' }}
                 />
 
                 <AnimatePresence mode="wait">
@@ -171,8 +173,8 @@ const DragDropUploader = ({ cvFile, cvUploading, studentCvInputRef, handleStuden
                                 className="mb-4"
                             >
                                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all ${isDragging
-                                        ? 'bg-gradient-to-br from-indigo-600 to-purple-600 shadow-lg shadow-indigo-500/50'
-                                        : 'bg-slate-700/50'
+                                    ? 'bg-gradient-to-br from-indigo-600 to-purple-600 shadow-lg shadow-indigo-500/50'
+                                    : 'bg-slate-700/50'
                                     }`}>
                                     <CloudUploadOutlined className={`text-4xl transition-colors ${isDragging ? 'text-white' : 'text-slate-400'
                                         }`} />

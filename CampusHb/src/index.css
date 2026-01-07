@@ -46,6 +46,51 @@ body {
   @apply !border-indigo-500;
 }
 
+/* Placeholder colors for dark theme */
+.ant-input::placeholder,
+.ant-input-password input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8 !important;
+  /* slate-400 */
+  opacity: 1 !important;
+}
+
+.ant-input:focus::placeholder,
+.ant-input-password input:focus::placeholder,
+input:focus::placeholder,
+textarea:focus::placeholder {
+  color: #cbd5e1 !important;
+  /* slate-300 - lighter on focus */
+  opacity: 0.7 !important;
+}
+
+/* Global text colors for dark theme */
+.ant-form-item-label>label,
+.ant-select-selection-placeholder,
+.ant-picker-input input::placeholder,
+label,
+.ant-typography {
+  color: #e2e8f0 !important;
+  /* slate-200 */
+}
+
+/* Select dropdown text */
+.ant-select-item-option-content,
+.ant-select-dropdown .ant-select-item {
+  color: #f1f5f9 !important;
+  /* slate-100 */
+}
+
+/* Ensure all input text is white */
+.ant-input,
+.ant-input-password input,
+.ant-select-selection-item,
+input,
+textarea {
+  color: #ffffff !important;
+}
+
 /* Global Overrides for Ant Design in Dark Theme */
 .custom-table .ant-table {
   background: transparent !important;
