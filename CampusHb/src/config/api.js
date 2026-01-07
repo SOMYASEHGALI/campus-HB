@@ -3,16 +3,17 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 // Get full API URL
 export const getApiUrl = (endpoint) => {
-    // Remove leading slash if present
+    // Remove leading slash from endpoint
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
 
     if (!API_BASE_URL) {
-        // Use relative URL (same domain)
         return `/api/${cleanEndpoint}`;
     }
 
-    // Use full URL from env
-    return `${API_BASE_URL}/${cleanEndpoint}`;
+    // Ensure API_BASE_URL doesn't end with a slash for consistent joining
+    const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+
+    return `${baseUrl}/${cleanEndpoint}`;
 };
 
 // Get upload URL

@@ -3,7 +3,6 @@ const Application = require('../models/Application');
 const Job = require('../models/Job');
 const { auth, admin } = require('../middleware/authMiddleware');
 const { Parser } = require('json2csv');
-const { uploadToCloudinary } = require('../services/cloudinaryService');
 const upload = require('../config/multer');
 const User = require('../models/User');
 const fs = require('fs');
@@ -55,9 +54,10 @@ router.post('/submit', auth, upload.single('resume'), async (req, res) => {
 
         let finalResumeUrl = resumeUrl; // Use provided link if no file
 
-        // If file uploaded, upload to Cloudinary
+        // If file uploaded, store the local path/URL
         if (req.file) {
-            finalResumeUrl = await uploadToCloudinary(req.file.buffer);
+            // Store the filename which can be used with the download bridge
+            finalResumeUrl = `/api/applications/download-cv/${req.file.filename}`;
         }
 
         const application = new Application({
@@ -354,16 +354,10 @@ router.post('/bulk-upload-cvs', auth, upload.array('resumes'), async (req, res) 
 
         const results = { success: 0, failed: 0, entries: [] };
 
-        // Processing each file individually to ensure no data loss or accidental compression
+        // Files are already saved to disk by multer middleware
         for (const file of files) {
             try {
-                // Ensure unique filename by prepending timestamp and using normalized original name
-                const safeName = file.originalname.replace(/\s+/g, '_');
-                const uniqueName = `CV-${Date.now()}-${Math.floor(Math.random() * 1000)}-${safeName}`;
-                const uploadPath = path.join(__dirname, '../uploads', uniqueName);
-
-                // Write each individual file to the server's local disk (Uncompressed)
-                fs.writeFileSync(uploadPath, file.buffer);
+                const uniqueName = file.filename;
 
                 // Extract student name from the filename
                 const cleanName = file.originalname.split('.')[0]
@@ -429,11 +423,8 @@ router.post('/upload-single-cv', auth, upload.single('resume'), async (req, res)
             return res.status(400).json({ message: "File or jobId missing" });
         }
 
-        const safeName = file.originalname.replace(/\s+/g, '_');
-        const uniqueName = `CV-${Date.now()}-${Math.floor(Math.random() * 1000)}-${safeName}`;
-        const uploadPath = path.join(__dirname, '../uploads', uniqueName);
-
-        fs.writeFileSync(uploadPath, file.buffer);
+        // File is already saved to disk by multer middleware
+        const uniqueName = file.filename;
 
         const cleanName = file.originalname.split('.')[0]
             .replace(/[_-]/g, ' ')
