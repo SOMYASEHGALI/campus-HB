@@ -96,9 +96,16 @@ const Register = () => {
                             rules={[{ required: true, message: 'Please select your institution' }]}
                         >
                             <Select
+<<<<<<< HEAD
                                 className="!h-12 !rounded-xl"
                                 placeholder="Choose your college/university"
                                 onChange={handleCollegeChange}
+=======
+                                className="!h-12 !rounded-xl register-select-control"
+                                placeholder="Choose your college/university"
+                                onChange={handleCollegeChange}
+                                dropdownClassName="register-select"
+>>>>>>> 4ed02f89a441dab2b9937b69da95d6a12203f7a0
                             >
                                 {colleges.map((college) => (
                                     <Option key={college} value={college}>
@@ -136,7 +143,15 @@ const Register = () => {
                             label={<span className="text-slate-300 font-medium">I am a...</span>}
                             rules={[{ required: true, message: 'Please select your role' }]}
                         >
+<<<<<<< HEAD
                             <Select className="!h-12 !rounded-xl" placeholder="Select your role">
+=======
+                            <Select
+                                className="!h-12 !rounded-xl register-select-control"
+                                placeholder="Select your role"
+                                dropdownClassName="register-select"
+                            >
+>>>>>>> 4ed02f89a441dab2b9937b69da95d6a12203f7a0
                                 <Option value="student">Student</Option>
                                 <Option value="staff">College Staff / TPO</Option>
                             </Select>
