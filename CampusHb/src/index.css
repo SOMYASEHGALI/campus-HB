@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --primary: #6366f1;
+  --bg-dark: #0f172a;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  @apply bg-slate-900 text-slate-50 min-h-screen;
+}
+
+.glass-card {
+  @apply bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400;
+}
+
+/* Custom styles to complement Ant Design and MUI */
+.ant-btn-primary {
+  @apply bg-indigo-600 border-none shadow-lg shadow-indigo-500/30 transition-all !h-auto py-2.5 px-6 font-semibold;
+}
+
+.ant-btn-primary:hover {
+  @apply bg-indigo-500 !important;
+}
+
+.ant-input,
+.ant-input-password {
+  @apply !bg-slate-800/50 !border-white/10 !text-white !shadow-none;
+}
+
+.ant-input:hover,
+.ant-input-password:hover {
+  @apply !border-indigo-500/50;
+}
+
+.ant-input:focus,
+.ant-input-password:focus {
+  @apply !border-indigo-500;
+}
+
+/* Placeholder colors for dark theme */
+.ant-input::placeholder,
+.ant-input-password input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8 !important;
+  /* slate-400 */
+  opacity: 1 !important;
+}
+
+.ant-input:focus::placeholder,
+.ant-input-password input:focus::placeholder,
+input:focus::placeholder,
+textarea:focus::placeholder {
+  color: #cbd5e1 !important;
+  /* slate-300 - lighter on focus */
+  opacity: 0.7 !important;
+}
+
+/* Global text colors for dark theme */
+.ant-form-item-label>label,
+.ant-select-selection-placeholder,
+.ant-picker-input input::placeholder,
+label,
+.ant-typography {
+  color: #e2e8f0 !important;
+  /* slate-200 */
+}
+
+/* Select dropdown text */
+.ant-select-item-option-content,
+.ant-select-dropdown .ant-select-item {
+  color: #f1f5f9 !important;
+  /* slate-100 */
+}
+
+/* Ensure all input text is white */
+.ant-input,
+.ant-input-password input,
+.ant-select-selection-item,
+input,
+textarea {
+  color: #ffffff !important;
+}
+
+/* Global Overrides for Ant Design in Dark Theme */
+.custom-table .ant-table {
+  background: transparent !important;
+  color: #94a3b8 !important;
+}
+
+.custom-table .ant-table-thead>tr>th {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: #64748b !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.custom-table .ant-table-tbody>tr>td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+  transition: all 0.3s;
+}
+
+.custom-table .ant-table-tbody>tr:hover>td {
+  background: rgba(99, 102, 241, 0.05) !important;
+}
+
+.admin-modal .ant-modal-content {
+  background: #1e293b !important;
+  border-radius: 2rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.admin-modal .ant-modal-header {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding-bottom: 20px !important;
+}
+
+.admin-modal .ant-modal-title {
+  color: white !important;
+}
+
+.admin-modal .ant-modal-close {
+  color: white !important;
+}
+
+/* Custom Tabs styling */
+.custom-tabs .ant-tabs-nav::before {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.custom-tabs .ant-tabs-tab {
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.custom-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #818cf8 !important;
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.3) !important;
+}
+
+.custom-tabs .ant-tabs-ink-bar {
+  background: #818cf8 !important;
+}
+
+/* PDF Viewer Modal - College Portal Style */
+.pdf-viewer-modal .ant-modal-content {
+  background: #1e293b !important;
+  border-radius: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+  overflow: hidden;
+  max-height: 95vh;
+}
+
+.pdf-viewer-modal .ant-modal-header {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2) !important;
+  padding: 16px 24px !important;
+  border-radius: 1rem 1rem 0 0 !important;
+}
+
+.pdf-viewer-modal .ant-modal-close {
+  color: rgba(255, 255, 255, 0.7) !important;
+  top: 16px !important;
+  right: 24px !important;
+  transition: all 0.3s ease;
+}
+
+.pdf-viewer-modal .ant-modal-close:hover {
+  color: #818cf8 !important;
+  transform: rotate(90deg);
+}
+
+.pdf-viewer-modal .ant-modal-body {
+  background: #0f172a !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.pdf-viewer-modal .ant-modal-footer {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  border-top: 1px solid rgba(99, 102, 241, 0.2) !important;
+  padding: 16px 24px !important;
+  border-radius: 0 0 1rem 1rem !important;
+}
+
+/* Register page select visibility fixes */
+.register-select-control .ant-select-selector {
+  background: #fff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+.register-select-control .ant-select-selection-item,
+.register-select-control .ant-select-selection-placeholder {
+  color: #0f172a !important;
+}
+
+.register-select {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.register-select .ant-select-item-option-content,
+.register-select .ant-select-item-option,
+.register-select .ant-select-item {
+  color: #0f172a !important;
+}
+
+.register-select .ant-select-item-option-active,
+.register-select .ant-select-item-option-selected {
+  background: #e5edff !important;
+  color: #0f172a !important;
+}
+
+.pdf-viewer-modal iframe {
+  display: block;
+  background: white;
+}
+
+/* Gradient animation for drag-drop uploader */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
