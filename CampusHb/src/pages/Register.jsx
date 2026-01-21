@@ -46,23 +46,35 @@ const Register = () => {
             message.success('Account created successfully! Welcome to CampusHB.');
             navigate('/');
         } catch (err) {
-            message.error(err.response?.data?.message || 'Registration failed.');
+            const errorMessage = err.response?.data?.message || 'Registration failed.';
+            const errorField = err.response?.data?.field;
+
+            // Show general error message
+            message.error(errorMessage);
+
+            // Highlight the specific field with error
+            if (errorField) {
+                form.setFields([{
+                    name: errorField,
+                    errors: [errorMessage],
+                }]);
+            }
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 py-20">
+        <div className="min-h-screen flex items-center justify-center px-4 py-20 bg-gradient-to-br from-blue-50 via-white to-violet-50">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="w-full max-w-2xl"
             >
-                <Card className="!bg-slate-800/50 !border-white/10 !rounded-[2rem] !backdrop-blur-xl p-4 sm:p-10 shadow-2xl">
+                <Card className="!bg-white !border-gray-200 !rounded-2xl shadow-lg p-4 sm:p-10">
                     <div className="text-center mb-10">
-                        <Title level={1} className="!text-white !m-0 !font-extrabold !text-4xl">Get Started</Title>
-                        <Text className="text-slate-400 text-lg">Our platform empowers students and placement cells by increasing the opportunities for them</Text>
+                        <Title level={1} className="!text-gray-900 !m-0 !font-extrabold !text-4xl">Get Started</Title>
+                        <Text className="text-gray-600 text-lg">Our platform empowers students and placement cells by increasing the opportunities for them</Text>
                     </div>
 
                     <Form
@@ -75,28 +87,28 @@ const Register = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
                             <Form.Item
                                 name="name"
-                                label={<span className="text-slate-300 font-medium">Your Name</span>}
+                                label={<span className="text-gray-700 font-medium">Your Name</span>}
                                 rules={[{ required: true, message: 'Required' }]}
                             >
-                                <Input prefix={<UserOutlined className="text-slate-500 mr-2" />} placeholder="John Doe" className="!h-12 !rounded-xl" />
+                                <Input prefix={<UserOutlined className="text-gray-400 mr-2" />} placeholder="John Doe" className="!h-12 !rounded-lg" />
                             </Form.Item>
 
                             <Form.Item
                                 name="email"
-                                label={<span className="text-slate-300 font-medium">Work Email</span>}
+                                label={<span className="text-gray-700 font-medium">Work Email</span>}
                                 rules={[{ required: true, message: 'Required' }, { type: 'email' }]}
                             >
-                                <Input prefix={<MailOutlined className="text-slate-500 mr-2" />} placeholder="name@college.edu" className="!h-12 !rounded-xl" />
+                                <Input prefix={<MailOutlined className="text-gray-400 mr-2" />} placeholder="name@college.edu" className="!h-12 !rounded-lg" />
                             </Form.Item>
                         </div>
 
                         <Form.Item
                             name="collegeSelector"
-                            label={<span className="text-slate-300 font-medium">Select Your Institution</span>}
+                            label={<span className="text-gray-700 font-medium">Select Your Institution</span>}
                             rules={[{ required: true, message: 'Please select your institution' }]}
                         >
                             <Select
-                                className="!h-12 !rounded-xl"
+                                className="!h-12 !rounded-lg"
                                 placeholder="Choose your college/university"
                                 onChange={handleCollegeChange}
                             >
@@ -111,13 +123,13 @@ const Register = () => {
                         {showOtherCollege && (
                             <Form.Item
                                 name="collegeName"
-                                label={<span className="text-slate-300 font-medium">Enter Institution Name</span>}
+                                label={<span className="text-gray-700 font-medium">Enter Institution Name</span>}
                                 rules={[{ required: true, message: 'Please enter your college name' }]}
                             >
                                 <Input
-                                    prefix={<BankOutlined className="text-slate-500 mr-2" />}
+                                    prefix={<BankOutlined className="text-gray-400 mr-2" />}
                                     placeholder="e.g. Indian Institute of Technology"
-                                    className="!h-12 !rounded-xl"
+                                    className="!h-12 !rounded-lg"
                                 />
                             </Form.Item>
                         )}
@@ -133,10 +145,10 @@ const Register = () => {
 
                         <Form.Item
                             name="role"
-                            label={<span className="text-slate-300 font-medium">I am a...</span>}
+                            label={<span className="text-gray-700 font-medium">I am a...</span>}
                             rules={[{ required: true, message: 'Please select your role' }]}
                         >
-                            <Select className="!h-12 !rounded-xl" placeholder="Select your role">
+                            <Select className="!h-12 !rounded-lg" placeholder="Select your role">
                                 <Option value="student">Student</Option>
                                 <Option value="staff">College Staff / TPO</Option>
                             </Select>
@@ -144,13 +156,13 @@ const Register = () => {
 
                         <Form.Item
                             name="password"
-                            label={<span className="text-slate-300 font-medium">Password</span>}
+                            label={<span className="text-gray-700 font-medium">Password</span>}
                             rules={[{ required: true, min: 6 }]}
                         >
-                            <Input.Password prefix={<LockOutlined className="text-slate-500 mr-2" />} placeholder="Minimum 6 characters" className="!h-12 !rounded-xl" />
+                            <Input.Password prefix={<LockOutlined className="text-gray-400 mr-2" />} placeholder="Minimum 6 characters" className="!h-12 !rounded-lg" />
                         </Form.Item>
 
-                        <Divider className="!border-white/5" />
+                        <Divider className="!border-gray-200" />
 
                         <Form.Item className="mt-8">
                             <Button
@@ -158,15 +170,15 @@ const Register = () => {
                                 htmlType="submit"
                                 block
                                 loading={loading}
-                                className="!h-14 !rounded-2xl font-bold text-lg"
+                                className="!h-14 !rounded-xl font-bold text-lg"
                             >
                                 Create Professional Account
                             </Button>
                         </Form.Item>
 
                         <div className="text-center">
-                            <Text className="text-slate-400">
-                                Already registered? <Link to="/login" className="text-indigo-400 hover:text-indigo-300 font-bold ml-1">Log in here</Link>
+                            <Text className="text-gray-600">
+                                Already registered? <Link to="/login" className="text-blue-600 hover:text-blue-700 font-bold ml-1">Log in here</Link>
                             </Text>
                         </div>
                     </Form>

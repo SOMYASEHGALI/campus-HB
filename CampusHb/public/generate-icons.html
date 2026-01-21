@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Generate Icons</title>
+</head>
+
+<body>
+    <h2>Icon Generator for CampusHB</h2>
+    <p>Right-click on each canvas and "Save image as..."</p>
+
+    <h3>192x192 Icon</h3>
+    <canvas id="icon192" width="192" height="192"></canvas>
+
+    <h3>512x512 Icon</h3>
+    <canvas id="icon512" width="512" height="512"></canvas>
+
+    <script>
+        function createIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+
+            // Create gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#2563eb');
+            gradient.addColorStop(1, '#7c3aed');
+
+            // Draw rounded rectangle background
+            const radius = size * 0.15;
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(size - radius, 0);
+            ctx.quadraticCurveTo(size, 0, size, radius);
+            ctx.lineTo(size, size - radius);
+            ctx.quadraticCurveTo(size, size, size - radius, size);
+            ctx.lineTo(radius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.fill();
+
+            // Draw text
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${size * 0.45}px Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('CB', size / 2, size / 2);
+        }
+
+        createIcon('icon192', 192);
+        createIcon('icon512', 512);
+
+        console.log('Icons generated! Right-click and save as:');
+        console.log('- icon-192.png');
+        console.log('- icon-512.png');
+    </script>
+</body>
+
+</html>
