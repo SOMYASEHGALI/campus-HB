@@ -1,0 +1,301 @@
+/* Modern Application Form - Clean & Bold Design */
+
+/* NO FADED TEXT - Everything is BOLD and CLEAR */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Modern Form Container */
+.modern-form-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Bold Section Headers - NO FADING */
+.modern-section-header {
+    color: #1e293b !important;
+    font-weight: 800 !important;
+    font-size: 24px !important;
+    margin-bottom: 8px !important;
+    letter-spacing: -0.5px;
+}
+
+.modern-section-subtitle {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+
+/* Modern Input Fields - Clean & Bold */
+.modern-input {
+    height: 56px !important;
+    border-radius: 12px !important;
+    border: 2px solid #e2e8f0 !important;
+    background: white !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #1e293b !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    padding: 0 20px !important;
+}
+
+.modern-input:hover {
+    border-color: #94a3b8 !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08) !important;
+}
+
+.modern-input:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+    outline: none !important;
+}
+
+/* Input Labels - BOLD and CLEAR */
+.modern-label {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    margin-bottom: 8px !important;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Modern Button - Eye-catching */
+.modern-submit-button {
+    height: 60px !important;
+    border-radius: 16px !important;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border: none !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: white !important;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3) !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modern-submit-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 15px 40px rgba(37, 99, 235, 0.4) !important;
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+}
+
+.modern-submit-button:active {
+    transform: translateY(0) !important;
+}
+
+/* Icon Container - Bold Colors */
+.modern-icon-container {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.modern-icon-container svg {
+    font-size: 28px;
+    color: white;
+}
+
+/* Card Sections - Clean Separation */
+.modern-card-section {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    border: 2px solid #e2e8f0;
+}
+
+/* Upload Area - Modern & Clean */
+.modern-upload-area {
+    border: 3px dashed #cbd5e1;
+    border-radius: 20px;
+    padding: 48px;
+    text-align: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.modern-upload-area:hover {
+    border-color: #2563eb;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    transform: scale(1.02);
+}
+
+.modern-upload-area.dragging {
+    border-color: #2563eb;
+    background: #dbeafe;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* Upload Text - BOLD */
+.modern-upload-text {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    font-size: 18px !important;
+    margin-bottom: 8px;
+}
+
+.modern-upload-subtext {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+
+/* Toggle Buttons - Modern Style */
+.modern-toggle-button {
+    padding: 16px 32px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.modern-toggle-button.active {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    color: white;
+    border-color: #2563eb;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.modern-toggle-button:hover:not(.active) {
+    border-color: #94a3b8;
+    background: #f8fafc;
+}
+
+/* Job Card - Premium Look */
+.modern-job-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border-left: 6px solid #2563eb;
+    margin-bottom: 32px;
+}
+
+.modern-job-title {
+    color: #0f172a !important;
+    font-weight: 800 !important;
+    font-size: 32px !important;
+    margin-bottom: 12px !important;
+    line-height: 1.2;
+}
+
+.modern-company-name {
+    color: #2563eb !important;
+    font-weight: 700 !important;
+    font-size: 20px !important;
+}
+
+/* Tags - Bold & Colorful */
+.modern-tag {
+    background: #dbeafe !important;
+    color: #1e40af !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+}
+
+/* Status Badge */
+.modern-status-badge {
+    background: #dcfce7;
+    color: #166534;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 2px solid #86efac;
+}
+
+/* Breadcrumb - Clear & Bold */
+.modern-breadcrumb {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+
+.modern-breadcrumb-active {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+
+/* Back Button - Clear */
+.modern-back-button {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease;
+}
+
+.modern-back-button:hover {
+    color: #2563eb !important;
+    transform: translateX(-4px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modern-form-container {
+        border-radius: 16px;
+        padding: 24px;
+    }
+
+    .modern-job-title {
+        font-size: 24px !important;
+    }
+
+    .modern-company-name {
+        font-size: 16px !important;
+    }
+
+    .modern-card-section {
+        padding: 20px;
+    }
+
+    .modern-input {
+        height: 52px !important;
+        font-size: 15px !important;
+    }
+}
+
+/* Smooth Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+/* Focus Ring - Accessible */
+*:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+}

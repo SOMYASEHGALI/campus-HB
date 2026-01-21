@@ -1,0 +1,12 @@
+// REPLACE LINES 898-907 in ApplyJob.jsx WITH THIS:
+
+                        </Card>
+                        <ToastContainer theme="dark" position="bottom-right" />
+                    </motion.div>
+                </div>
+            </div>
+        </>
+    );
+};
+
+export default ApplyJob;

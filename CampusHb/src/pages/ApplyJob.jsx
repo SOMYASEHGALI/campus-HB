@@ -8,6 +8,8 @@ import { ExperimentOutlined, CloudUploadOutlined, LoadingOutlined, CheckCircleOu
 import { getApiUrl } from '../config/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ThreeBackground } from '../components/ThreeBackground';
+import '../styles/modern-form.css';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -60,8 +62,8 @@ const DragDropUploader = ({ cvFile, cvUploading, studentCvInputRef, handleStuden
     };
 
     return (
-        <div className="p-6 bg-slate-900/30 rounded-2xl border border-white/5">
-            <Text className="text-slate-300 font-semibold block mb-4">Upload Your Resume</Text>
+        <div className="modern-card-section p-8">
+            <label className="modern-label !mb-6">Upload Your Resume</label>
 
             <div
                 onDragEnter={handleDragEnter}
@@ -69,14 +71,7 @@ const DragDropUploader = ({ cvFile, cvUploading, studentCvInputRef, handleStuden
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => !cvFile && !cvUploading && studentCvInputRef.current?.click()}
-                className={`relative h-48 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all duration-300 ${cvFile
-                    ? 'border-green-500/40 bg-gradient-to-br from-green-500/10 to-emerald-500/5'
-                    : cvUploading
-                        ? 'border-cyan-500/40 bg-gradient-to-br from-cyan-500/10 to-blue-500/5'
-                        : isDragging
-                            ? 'border-indigo-500/60 bg-gradient-to-br from-indigo-500/20 to-purple-500/10 scale-[1.02]'
-                            : 'border-white/10 hover:border-indigo-500/40 bg-slate-800/30 cursor-pointer hover:bg-slate-800/50'
-                    }`}
+                className={`modern-upload-area ${isDragging ? 'dragging' : ''}`}
             >
                 <input
                     type="file"
@@ -125,8 +120,8 @@ const DragDropUploader = ({ cvFile, cvUploading, studentCvInputRef, handleStuden
                                     className="absolute inset-0 rounded-full border-2 border-green-500/30"
                                 ></motion.div>
                             </div>
-                            <Text className="text-white font-semibold text-lg mb-1">File Ready!</Text>
-                            <Text className="text-slate-400 text-sm mb-4 truncate max-w-full">{cvFile.name}</Text>
+                            <Text className="text-gray-900 font-semibold text-lg mb-1">File Ready!</Text>
+                            <Text className="text-gray-600 text-sm mb-4 truncate max-w-full">{cvFile.name}</Text>
                             <div className="flex gap-3">
                                 <Button
                                     type="primary"
@@ -172,23 +167,18 @@ const DragDropUploader = ({ cvFile, cvUploading, studentCvInputRef, handleStuden
                                 }}
                                 className="mb-4"
                             >
-                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all ${isDragging
-                                    ? 'bg-gradient-to-br from-indigo-600 to-purple-600 shadow-lg shadow-indigo-500/50'
-                                    : 'bg-slate-700/50'
-                                    }`}>
-                                    <CloudUploadOutlined className={`text-4xl transition-colors ${isDragging ? 'text-white' : 'text-slate-400'
-                                        }`} />
+                                <div className={`modern-icon-container ${isDragging ? 'scale-110 shadow-xl' : ''}`}>
+                                    <CloudUploadOutlined />
                                 </div>
                             </motion.div>
-                            <Text className={`font-semibold text-lg mb-2 transition-colors ${isDragging ? 'text-indigo-400' : 'text-slate-300'
-                                }`}>
+                            <h4 className="modern-upload-text !mt-4">
                                 {isDragging ? 'Drop your file here' : 'Drag & drop your CV'}
-                            </Text>
-                            <Text className="text-slate-500 text-sm mb-3">or click to browse</Text>
-                            <div className="flex gap-2">
-                                <Tag className="!bg-slate-700/50 !border-slate-600 !text-slate-400 !rounded-lg">PDF</Tag>
-                                <Tag className="!bg-slate-700/50 !border-slate-600 !text-slate-400 !rounded-lg">DOC</Tag>
-                                <Tag className="!bg-slate-700/50 !border-slate-600 !text-slate-400 !rounded-lg">DOCX</Tag>
+                            </h4>
+                            <p className="modern-upload-subtext">or click to browse</p>
+                            <div className="flex gap-2 mt-4">
+                                <span className="modern-tag">PDF</span>
+                                <span className="modern-tag">DOC</span>
+                                <span className="modern-tag">DOCX</span>
                             </div>
                         </motion.div>
                     )}
@@ -209,10 +199,10 @@ const DragDropUploader = ({ cvFile, cvUploading, studentCvInputRef, handleStuden
                 )}
             </div>
 
-            <Text className="text-slate-500 text-xs mt-3 block text-center">
+            <Text className="text-gray-500 text-xs font-bold mt-3 block text-center uppercase tracking-wider">
                 Maximum file size: 10MB
             </Text>
-        </div>
+        </div >
     );
 };
 
@@ -413,490 +403,479 @@ const ApplyJob = () => {
         e.target.value = '';
     };
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center text-slate-400">Loading enterprise data...</div>;
+    if (loading) return <div className="min-h-screen flex items-center justify-center text-gray-600 bg-gray-50">Loading job details...</div>;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8">
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <Breadcrumb
-                    className="mb-8"
-                    separator={<span className="text-slate-600">/</span>}
-                    items={[
-                        { title: <Link to="/" className="!text-slate-400 hover:!text-indigo-400">Dashboard</Link> },
-                        { title: <span className="!text-slate-200">Application Portal</span> }
-                    ]}
-                />
+        <>
+            <ThreeBackground />
+            <div className="max-w-7xl mx-auto px-4 py-8 min-h-screen relative z-10">
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                    <Breadcrumb
+                        className="mb-8 modern-breadcrumb"
+                        separator={<span className="text-gray-600 font-bold">/</span>}
+                        items={[
+                            { title: <Link to="/" className="hover:!text-blue-600">Dashboard</Link> },
+                            { title: <span className="modern-breadcrumb-active">Application Portal</span> }
+                        ]}
+                    />
 
-                <Button
-                    type="text"
-                    icon={<ArrowLeftOutlined />}
-                    onClick={() => navigate(-1)}
-                    className="!text-slate-400 hover:!text-indigo-400 !font-semibold mb-6 flex items-center gap-2 p-0"
-                >
-                    Back to Listings
-                </Button>
-            </motion.div>
-
-            <div className="space-y-10">
-                {/* Job Description Section - Top */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                    <Card className="!bg-slate-800/40 !border-white/5 !rounded-3xl border-l-4 !border-l-indigo-500 overflow-hidden shadow-2xl">
-                        <div className="mb-8">
-                            <Title level={2} className="!text-white !mb-2 !font-bold leading-tight">{job.title}</Title>
-                            <div className="flex items-center gap-2 text-indigo-400 font-bold mb-4">
-                                <BankOutlined /> {job.company}
-                            </div>
-                            <div className="flex flex-wrap gap-6 py-6 border-y border-white/5">
-                                <div className="flex items-center gap-3 text-slate-300">
-                                    <Tag color="rgba(99, 102, 241, 0.1)" className="!text-indigo-400 !m-0">ACTIVE</Tag>
-                                    <Text className="text-slate-500">• Posted {new Date(job.createdAt).toLocaleDateString()}</Text>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-slate-700/50 flex items-center justify-center text-indigo-400">
-                                        <ProjectOutlined />
-                                    </div>
-                                    <div>
-                                        <Text className="text-slate-500 block text-xs uppercase font-bold letter-spacing-widest">Experience</Text>
-                                        <Text className="text-slate-200 font-medium">{job.experience || 'Not Specified'}</Text>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div>
-                                <Title level={5} className="!text-slate-300 mb-4 flex items-center gap-2 uppercase text-xs tracking-widest font-black">Role Description</Title>
-                                <Paragraph className="text-slate-400 leading-relaxed">{job.description}</Paragraph>
-                            </div>
-
-                            {job.skills && job.skills.length > 0 && (
-                                <div>
-                                    <Title level={5} className="!text-slate-300 mb-4 uppercase text-xs tracking-widest font-black">Required Frameworks</Title>
-                                    <div className="flex flex-wrap gap-2">
-                                        {job.skills.map(skill => (
-                                            <Tag key={skill} className="!bg-indigo-500/10 !border-indigo-500/20 !text-indigo-300 !rounded-lg !m-0 px-3 py-1 text-sm font-medium">
-                                                {skill}
-                                            </Tag>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </Card>
+                    <Button
+                        type="text"
+                        icon={<ArrowLeftOutlined />}
+                        onClick={() => navigate(-1)}
+                        className="modern-back-button mb-6 flex items-center gap-2 p-0"
+                    >
+                        Back to Listings
+                    </Button>
                 </motion.div>
 
-                {/* Application Form Section - Bottom */}
-                <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
-                    <Card className="!bg-slate-800/60 !border-white/5 !rounded-[2.5rem] p-4 sm:p-10 !backdrop-blur-2xl shadow-2xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full -mr-32 -mt-32 blur-[80px]"></div>
-
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12 relative z-10">
-                            <div>
-                                <Title level={2} className="!text-white !m-0 !font-black !text-3xl">Candidate Intake</Title>
-                                <Text className="text-slate-500 font-medium">Placement Cell: <span className="text-indigo-400 font-bold">{user.collegeName}</span></Text>
-                            </div>
-                            <div className="px-6 py-3 bg-slate-900/50 rounded-2xl border border-white/5 flex items-center gap-3">
-                                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                                <Text className="text-slate-300 font-bold text-sm tracking-wide">SYSTEM SECURE</Text>
-                            </div>
-                        </div>
-
-                        {user.role === 'staff' ? (
-                            <div className="relative z-10 py-10 text-center">
-                                {!isKeyVerified ? (
-                                    <div className="max-w-md mx-auto">
-                                        <div className="w-20 h-20 bg-amber-500/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                                            <ExperimentOutlined className="text-4xl text-amber-500" />
+                <div className="space-y-10">
+                    {/* Job Description Section - Top */}
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                        <Card className="modern-job-card overflow-hidden">
+                            <div className="mb-8">
+                                <Title level={1} className="modern-job-title">{job.title}</Title>
+                                <div className="flex items-center gap-2 modern-company-name mb-4">
+                                    <BankOutlined /> {job.company}
+                                </div>
+                                <div className="flex flex-wrap gap-6 py-6 border-y border-gray-200">
+                                    <div className="flex items-center gap-3">
+                                        <span className="modern-status-badge">
+                                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                            ACTIVE
+                                        </span>
+                                        <Text className="text-gray-900 font-bold">• Posted {new Date(job.createdAt).toLocaleDateString()}</Text>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="modern-icon-container">
+                                            <ProjectOutlined />
                                         </div>
-                                        <Title level={3} className="!text-white mb-4">Staff Verification Required</Title>
-                                        <Text className="text-slate-400 block mb-8 text-lg">
-                                            Enter the <span className="text-amber-400 font-bold italic underline">HB-MASTER-KEY</span> to unlock bulk recruitment tools for <span className="text-white font-semibold">{job.company}</span>.
-                                        </Text>
-
-                                        <div className="space-y-6">
-                                            <Input.Password
-                                                placeholder="Enter Access Key"
-                                                value={bulkKey}
-                                                onChange={(e) => setBulkKey(e.target.value)}
-                                                className="!h-16 !rounded-2xl text-center text-2xl tracking-[0.5em] !bg-slate-900/50 !border-white/10"
-                                                onPressEnter={() => {
-                                                    if (bulkKey === 'HBSTAFF2025') {
-                                                        setIsKeyVerified(true);
-                                                        message.success('Master Access Granted');
-                                                    } else {
-                                                        message.error('Invalid Credentials');
-                                                    }
-                                                }}
-                                            />
-                                            <Button
-                                                type="primary"
-                                                size="large"
-                                                block
-                                                className="!h-16 !rounded-2xl font-bold text-lg !bg-amber-500 hover:!bg-amber-600 !border-none"
-                                                onClick={() => {
-                                                    if (bulkKey === 'HBSTAFF2025') {
-                                                        setIsKeyVerified(true);
-                                                        message.success('Master Access Granted');
-                                                    } else {
-                                                        message.error('Invalid Credentials');
-                                                    }
-                                                }}
-                                            >
-                                                Verify & Unlock Bulk Upload
-                                            </Button>
-                                            <Text className="text-slate-500 text-xs flex items-center justify-center gap-2">
-                                                <span className="w-2 h-2 bg-slate-600 rounded-full"></span>
-                                                Single form submission is disabled for staff accounts
-                                            </Text>
+                                        <div>
+                                            <Text className="text-gray-950 block text-xs uppercase font-black tracking-widest">Experience</Text>
+                                            <Text className="text-gray-900 font-bold text-lg">{job.experience || 'Not Specified'}</Text>
                                         </div>
                                     </div>
-                                ) : (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="max-w-2xl mx-auto"
-                                    >
-                                        <div className="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-green-500/20">
-                                            <SendOutlined className="text-4xl text-green-500" />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <div>
+                                    <Title level={5} className="!text-gray-900 mb-4 flex items-center gap-2 uppercase text-xs tracking-wide font-black">Role Description</Title>
+                                    <Paragraph className="text-gray-900 leading-relaxed font-medium">{job.description}</Paragraph>
+                                </div>
+
+                                {job.skills && job.skills.length > 0 && (
+                                    <div>
+                                        <Title level={5} className="!text-gray-900 mb-4 uppercase text-xs tracking-wide font-black">Required Skills</Title>
+                                        <div className="flex flex-wrap gap-2">
+                                            {job.skills.map(skill => (
+                                                <Tag key={skill} className="!bg-blue-50 !border-blue-200 !text-blue-700 !rounded-lg !m-0 px-3 py-1 text-sm font-medium">
+                                                    {skill}
+                                                </Tag>
+                                            ))}
                                         </div>
-                                        <Title level={3} className="!text-white mb-2">Master Upload Active</Title>
-                                        <Tag color="green" className="mb-8 !rounded-full px-4">Ready for Bulk Data Transmission</Tag>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                                            <input
-                                                type="file"
-                                                ref={sheetInputRef}
-                                                style={{ display: 'none' }}
-                                                accept=".csv, .xlsx, .xls"
-                                                onChange={(e) => handleFileUpload(e, 'Database')}
-                                            />
-                                            <div className="glass-card p-6 !bg-indigo-600/5 border border-indigo-500/20 rounded-[2rem] hover:!bg-indigo-600/10 transition-all cursor-pointer group flex flex-col items-center">
-                                                <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-4">
-                                                    <FileTextOutlined className="text-xl text-indigo-400" />
-                                                </div>
-                                                <Title level={5} className="!text-white mb-2 group-hover:text-indigo-400">Database (CSV/XLSX)</Title>
-                                                <Text className="text-slate-500 text-xs text-center mb-6">Bulk application processing via student records</Text>
-                                                <Button
-                                                    type="primary"
-                                                    block
-                                                    loading={isUploading}
-                                                    className="!h-12 !rounded-xl !bg-indigo-600"
-                                                    onClick={() => sheetInputRef.current.click()}
-                                                >
-                                                    Upload Sheet
-                                                </Button>
-                                            </div>
-
-                                            <input
-                                                type="file"
-                                                ref={resumeInputRef}
-                                                style={{ display: 'none' }}
-                                                accept=".pdf, .docx, .doc"
-                                                multiple
-                                                onChange={(e) => handleFileUpload(e, 'Resumes')}
-                                            />
-                                            <div className="glass-card p-6 !bg-amber-600/5 border border-amber-500/20 rounded-[2rem] hover:!bg-amber-600/10 transition-all cursor-pointer group flex flex-col items-center">
-                                                <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center mb-4">
-                                                    <PaperClipOutlined className="text-xl text-amber-400" />
-                                                </div>
-                                                <Title level={5} className="!text-white mb-2 group-hover:text-amber-400">Resumes (PDF/DOCX)</Title>
-                                                <Text className="text-slate-500 text-xs text-center mb-6">Mass upload of verified student portfolios</Text>
-                                                <Button
-                                                    type="primary"
-                                                    block
-                                                    loading={isUploading}
-                                                    className="!h-12 !rounded-xl !bg-amber-600 !border-none"
-                                                    onClick={() => resumeInputRef.current.click()}
-                                                >
-                                                    Upload Files
-                                                </Button>
-                                            </div>
-                                        </div>
-
-                                        {isUploading && (
-                                            <div className="w-full mb-8 bg-black/40 backdrop-blur-xl p-8 rounded-[2rem] border border-white/10 shadow-2xl">
-                                                <div className="flex justify-between items-center mb-6">
-                                                    <div>
-                                                        <Title level={4} className="!text-white !m-0 flex items-center gap-3">
-                                                            <CloudUploadOutlined className="text-cyan-400 animate-pulse" />
-                                                            Enterprise Uplink
-                                                        </Title>
-                                                        <Text className="text-slate-500 text-xs">Processing global residency requests</Text>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <Text className="text-cyan-400 font-mono text-xl font-bold">{uploadProgress}%</Text>
-                                                        <div className="text-[10px] text-slate-600 font-mono uppercase tracking-tighter">Throughput Optimized</div>
-                                                    </div>
-                                                </div>
-
-                                                <Progress
-                                                    percent={uploadProgress}
-                                                    status="active"
-                                                    strokeColor={{ '0%': '#06b6d4', '100%': '#6366f1' }}
-                                                    trailColor="rgba(255,255,255,0.03)"
-                                                    strokeWidth={12}
-                                                    showInfo={false}
-                                                    className="mb-8"
-                                                />
-
-                                                <div className="max-h-48 overflow-y-auto space-y-2 pr-2 custom-scrollbar font-mono">
-                                                    {uploadQueue.map((item, idx) => (
-                                                        <div
-                                                            key={idx}
-                                                            className={`flex items-center justify-between p-3 rounded-xl border transition-all ${idx === currentFileIndex ? 'bg-cyan-500/10 border-cyan-500/30' :
-                                                                item.status === 'success' ? 'bg-green-500/5 border-green-500/10 opacity-60' :
-                                                                    'bg-white/5 border-white/5 opacity-40'
-                                                                }`}
-                                                        >
-                                                            <div className="flex items-center gap-3 truncate max-w-[70%]">
-                                                                {item.status === 'pending' && <LoadingOutlined className="text-slate-500" />}
-                                                                {item.status === 'success' && <CheckCircleOutlined className="text-green-500" />}
-                                                                {item.status === 'error' && <CloseCircleOutlined className="text-red-500" />}
-                                                                <Text className="text-slate-300 text-xs truncate">{item.name}</Text>
-                                                            </div>
-                                                            <Text className={`text-[10px] font-bold ${idx === currentFileIndex ? 'text-cyan-400' :
-                                                                item.status === 'success' ? 'text-green-500' : 'text-slate-600'
-                                                                }`}>
-                                                                {idx === currentFileIndex ? 'UPLOADING...' : item.status.toUpperCase()}
-                                                            </Text>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        <Button
-                                            type="text"
-                                            className="!text-slate-500 hover:!text-slate-300 !mt-4"
-                                            onClick={() => {
-                                                setIsKeyVerified(false);
-                                                setBulkKey('');
-                                            }}
-                                        >
-                                            Lock Session & Logout
-                                        </Button>
-                                    </motion.div>
+                                    </div>
                                 )}
                             </div>
-                        ) : (
-                            <Form
-                                form={form}
-                                layout="vertical"
-                                onFinish={onFinish}
-                                requiredMark={false}
-                                className="relative z-10"
-                            >
-                                {/* Personal Information Section */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="mb-10"
-                                >
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center">
-                                            <UserOutlined className="text-white text-lg" />
-                                        </div>
-                                        <div>
-                                            <Title level={4} className="!text-white !m-0 !font-bold">Personal Information</Title>
-                                            <Text className="text-slate-500 text-xs">Enter your basic details</Text>
-                                        </div>
-                                    </div>
+                        </Card>
+                    </motion.div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-slate-900/30 rounded-2xl border border-white/5">
-                                        <Form.Item
-                                            name="studentName"
-                                            label={<span className="text-slate-300 font-semibold text-sm">Full Legal Name</span>}
-                                            rules={[{ required: true, message: 'Please enter your full name' }]}
-                                        >
-                                            <Input
-                                                prefix={<UserOutlined className="text-slate-500" />}
-                                                placeholder="e.g. Rahul Sharma"
-                                                className="!h-12 !rounded-xl !bg-slate-800/50 !border-white/10 hover:!border-indigo-500/50 focus:!border-indigo-500"
-                                            />
-                                        </Form.Item>
+                    {/* Application Form Section - Bottom */}
+                    <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
+                        <Card className="modern-form-container p-4 sm:p-10 relative overflow-hidden">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12 relative z-10">
+                                <div>
+                                    <h2 className="modern-section-header">Application Form</h2>
+                                    <p className="modern-section-subtitle">Placement Cell: <span className="text-blue-600 font-bold">{user.collegeName}</span></p>
+                                </div>
+                                <div className="modern-status-badge">
+                                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                    SECURE CONNECTION
+                                </div>
+                            </div>
 
-                                        <Form.Item
-                                            name="email"
-                                            label={<span className="text-slate-300 font-semibold text-sm">University Email</span>}
-                                            rules={[
-                                                { required: true, message: 'Please enter your email' },
-                                                { type: 'email', message: 'Please enter a valid email' }
-                                            ]}
-                                        >
-                                            <Input
-                                                prefix={<MailOutlined className="text-slate-500" />}
-                                                placeholder="rahul@college.edu"
-                                                className="!h-12 !rounded-xl !bg-slate-800/50 !border-white/10 hover:!border-indigo-500/50 focus:!border-indigo-500"
-                                            />
-                                        </Form.Item>
+                            {user.role === 'staff' ? (
+                                <div className="relative z-10 py-10 text-center">
+                                    {!isKeyVerified ? (
+                                        <div className="max-w-md mx-auto">
+                                            <div className="modern-icon-container mx-auto mb-8 !w-20 !h-20" style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}>
+                                                <ExperimentOutlined className="!text-4xl" />
+                                            </div>
+                                            <h3 className="modern-section-header !text-2xl text-center">Staff Verification</h3>
+                                            <p className="modern-section-subtitle text-center mb-8">
+                                                Enter the <span className="text-amber-600 font-bold italic underline">HB-MASTER-KEY</span> to unlock bulk recruitment tools for <span className="text-gray-900 font-bold">{job.company}</span>.
+                                            </p>
 
-                                        <Form.Item
-                                            name="phone"
-                                            label={<span className="text-slate-300 font-semibold text-sm">Mobile Number</span>}
-                                            rules={[{ required: true, message: 'Please enter your phone number' }]}
-                                        >
-                                            <Input
-                                                prefix={<PhoneOutlined className="text-slate-500" />}
-                                                placeholder="+91 98765-43210"
-                                                className="!h-12 !rounded-xl !bg-slate-800/50 !border-white/10 hover:!border-indigo-500/50 focus:!border-indigo-500"
-                                            />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            name="rollNumber"
-                                            label={<span className="text-slate-300 font-semibold text-sm">Roll Number / Student ID</span>}
-                                        >
-                                            <Input
-                                                prefix={<IdcardOutlined className="text-slate-500" />}
-                                                placeholder="CS-2024-512"
-                                                className="!h-12 !rounded-xl !bg-slate-800/50 !border-white/10 hover:!border-indigo-500/50 focus:!border-indigo-500"
-                                            />
-                                        </Form.Item>
-                                    </div>
-                                </motion.div>
-
-                                {/* Resume Upload Section */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.1 }}
-                                    className="mb-10"
-                                >
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center">
-                                            <FileTextOutlined className="text-white text-lg" />
-                                        </div>
-                                        <div>
-                                            <Title level={4} className="!text-white !m-0 !font-bold">Resume / CV</Title>
-                                            <Text className="text-slate-500 text-xs">Choose how you want to submit your resume</Text>
-                                        </div>
-                                    </div>
-
-                                    {/* Toggle Buttons */}
-                                    <div className="flex gap-3 mb-6 p-1.5 bg-slate-900/50 rounded-2xl border border-white/5 w-fit">
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setSubmissionType('link');
-                                                setCvFile(null);
-                                            }}
-                                            className={`px-6 py-3 rounded-xl transition-all font-semibold text-sm flex items-center gap-2 ${submissionType === 'link'
-                                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
-                                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-                                                }`}
-                                        >
-                                            <LinkOutlined />
-                                            Drive Link
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setSubmissionType('file');
-                                                form.setFieldsValue({ resumeUrl: undefined });
-                                            }}
-                                            className={`px-6 py-3 rounded-xl transition-all font-semibold text-sm flex items-center gap-2 ${submissionType === 'file'
-                                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30'
-                                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-                                                }`}
-                                        >
-                                            <CloudUploadOutlined />
-                                            Upload File
-                                        </button>
-                                    </div>
-
-                                    {/* Content Based on Selection */}
-                                    <AnimatePresence mode="wait">
-                                        {submissionType === 'link' ? (
-                                            <motion.div
-                                                key="link"
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, x: 20 }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                <Form.Item
-                                                    name="resumeUrl"
-                                                    rules={[
-                                                        { required: submissionType === 'link', message: 'Please enter your resume link' },
-                                                        { type: 'url', message: 'Please enter a valid URL' }
-                                                    ]}
-                                                >
-                                                    <div className="p-6 bg-slate-900/30 rounded-2xl border border-white/5">
-                                                        <Text className="text-slate-300 font-semibold block mb-3">Resume Link</Text>
-                                                        <Input
-                                                            prefix={<LinkOutlined className="text-indigo-400" />}
-                                                            placeholder="https://drive.google.com/your-resume-link"
-                                                            className="!h-14 !rounded-xl !bg-slate-800/50 !border-indigo-500/30 hover:!border-indigo-500/50 focus:!border-indigo-500 !text-base"
-                                                        />
-                                                        <Text className="text-slate-500 text-xs italic mt-2 block">
-                                                            💡 Make sure your link is publicly accessible
-                                                        </Text>
-                                                    </div>
-                                                </Form.Item>
-                                            </motion.div>
-                                        ) : (
-                                            <motion.div
-                                                key="file"
-                                                initial={{ opacity: 0, x: 20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, x: -20 }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                <DragDropUploader
-                                                    cvFile={cvFile}
-                                                    cvUploading={cvUploading}
-                                                    studentCvInputRef={studentCvInputRef}
-                                                    handleStudentCvUpload={handleStudentCvUpload}
-                                                    setCvFile={setCvFile}
+                                            <div className="space-y-6">
+                                                <Input.Password
+                                                    placeholder="Enter Access Key"
+                                                    value={bulkKey}
+                                                    onChange={(e) => setBulkKey(e.target.value)}
+                                                    className="modern-input !h-20 text-center !text-3xl tracking-[0.5em]"
+                                                    onPressEnter={() => {
+                                                        if (bulkKey === 'HBSTAFF2025') {
+                                                            setIsKeyVerified(true);
+                                                            message.success('Master Access Granted');
+                                                        } else {
+                                                            message.error('Invalid Credentials');
+                                                        }
+                                                    }}
                                                 />
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </motion.div>
+                                                <Button
+                                                    type="primary"
+                                                    block
+                                                    className="modern-submit-button !h-16 !bg-amber-500 hover:!bg-amber-600"
+                                                    onClick={() => {
+                                                        if (bulkKey === 'HBSTAFF2025') {
+                                                            setIsKeyVerified(true);
+                                                            message.success('Master Access Granted');
+                                                        } else {
+                                                            message.error('Invalid Credentials');
+                                                        }
+                                                    }}
+                                                >
+                                                    Verify & Unlock Bulk Upload
+                                                </Button>
+                                                <Text className="text-slate-500 text-xs flex items-center justify-center gap-2">
+                                                    <span className="w-2 h-2 bg-slate-600 rounded-full"></span>
+                                                    Single form submission is disabled for staff accounts
+                                                </Text>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="max-w-4xl mx-auto"
+                                        >
+                                            <div className="modern-status-badge !px-8 !py-4 !bg-green-100 !text-green-800 !border-green-300 flex items-center justify-center mx-auto mb-8 w-fit">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse mr-2"></div>
+                                                MASTER UPLOAD ACTIVE
+                                            </div>
 
-                                {/* Submit Button */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.2 }}
-                                >
-                                    <Divider className="!border-white/5 my-8" />
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                                                <input
+                                                    type="file"
+                                                    ref={sheetInputRef}
+                                                    style={{ display: 'none' }}
+                                                    accept=".csv, .xlsx, .xls"
+                                                    onChange={(e) => handleFileUpload(e, 'Database')}
+                                                />
+                                                <div className="modern-card-section hover:border-blue-500 transition-all cursor-pointer group flex flex-col items-center !mb-0">
+                                                    <div className="modern-icon-container mb-4">
+                                                        <FileTextOutlined />
+                                                    </div>
+                                                    <h4 className="modern-section-header !text-lg !text-center group-hover:text-blue-600">Database (CSV/XLSX)</h4>
+                                                    <p className="modern-section-subtitle text-center mb-6">Bulk application processing via student records</p>
+                                                    <Button
+                                                        type="primary"
+                                                        block
+                                                        loading={isUploading}
+                                                        className="modern-submit-button !h-12 !text-sm"
+                                                        onClick={() => sheetInputRef.current.click()}
+                                                    >
+                                                        Upload Sheet
+                                                    </Button>
+                                                </div>
 
-                                    <Button
-                                        type="primary"
-                                        htmlType="submit"
-                                        loading={submitting}
-                                        disabled={submissionType === 'file' && !cvFile}
-                                        block
-                                        size="large"
-                                        className="!h-16 !rounded-2xl font-bold text-lg !bg-gradient-to-r !from-indigo-600 !to-purple-600 hover:!from-indigo-500 hover:!to-purple-500 !border-none shadow-2xl shadow-indigo-500/30 flex items-center justify-center gap-3 group relative overflow-hidden"
-                                    >
-                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                                        <span className="relative flex items-center gap-3">
-                                            <SendOutlined className="text-xl group-hover:rotate-[-10deg] transition-transform" />
-                                            Submit Application
-                                            <motion.span
-                                                className="inline-block"
-                                                animate={{ x: [0, 5, 0] }}
-                                                transition={{ repeat: Infinity, duration: 1.5 }}
+                                                <input
+                                                    type="file"
+                                                    ref={resumeInputRef}
+                                                    style={{ display: 'none' }}
+                                                    accept=".pdf, .docx, .doc"
+                                                    multiple
+                                                    onChange={(e) => handleFileUpload(e, 'Resumes')}
+                                                />
+                                                <div className="modern-card-section hover:border-amber-500 transition-all cursor-pointer group flex flex-col items-center !mb-0">
+                                                    <div className="modern-icon-container mb-4" style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}>
+                                                        <PaperClipOutlined />
+                                                    </div>
+                                                    <h4 className="modern-section-header !text-lg !text-center group-hover:text-amber-600">Resumes (PDF/DOCX)</h4>
+                                                    <p className="modern-section-subtitle text-center mb-6">Mass upload of verified student portfolios</p>
+                                                    <Button
+                                                        type="primary"
+                                                        block
+                                                        loading={isUploading}
+                                                        className="modern-submit-button !h-12 !text-sm !bg-amber-500 hover:!bg-amber-600"
+                                                        onClick={() => resumeInputRef.current.click()}
+                                                    >
+                                                        Upload Files
+                                                    </Button>
+                                                </div>
+                                            </div>
+
+                                            {isUploading && (
+                                                <div className="w-full mb-8 bg-white border-2 border-blue-100 p-8 rounded-[2rem] shadow-xl">
+                                                    <div className="flex justify-between items-center mb-6">
+                                                        <div>
+                                                            <Title level={4} className="!text-gray-900 !m-0 !font-bold flex items-center gap-3">
+                                                                <CloudUploadOutlined className="text-blue-600 animate-pulse" />
+                                                                Enterprise Uplink
+                                                            </Title>
+                                                            <Text className="text-gray-500 text-xs font-bold uppercase tracking-widest">Active Processing Channel</Text>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <Text className="text-blue-600 font-mono text-2xl font-black">{uploadProgress}%</Text>
+                                                            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">Throughput Optimized</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <Progress
+                                                        percent={uploadProgress}
+                                                        status="active"
+                                                        strokeColor={{ '0%': '#2563eb', '100%': '#3b82f6' }}
+                                                        trailColor="#f1f5f9"
+                                                        strokeWidth={12}
+                                                        showInfo={false}
+                                                        className="mb-8"
+                                                    />
+
+                                                    <div className="max-h-48 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+                                                        {uploadQueue.map((item, idx) => (
+                                                            <div
+                                                                key={idx}
+                                                                className={`flex items-center justify-between p-3 rounded-xl border-2 transition-all ${idx === currentFileIndex ? 'bg-blue-50 border-blue-200' :
+                                                                    item.status === 'success' ? 'bg-green-50 border-green-100 opacity-60' :
+                                                                        'bg-gray-50 border-gray-100 opacity-40'
+                                                                    }`}
+                                                            >
+                                                                <div className="flex items-center gap-3 truncate max-w-[70%]">
+                                                                    {item.status === 'pending' && <LoadingOutlined className="text-blue-500" />}
+                                                                    {item.status === 'success' && <CheckCircleOutlined className="text-green-500" />}
+                                                                    {item.status === 'error' && <CloseCircleOutlined className="text-red-500" />}
+                                                                    <Text className="text-gray-900 text-xs font-bold truncate">{item.name}</Text>
+                                                                </div>
+                                                                <Text className={`text-[10px] font-black ${idx === currentFileIndex ? 'text-blue-600' :
+                                                                    item.status === 'success' ? 'text-green-600' : 'text-gray-400'
+                                                                    }`}>
+                                                                    {idx === currentFileIndex ? 'UPLOADING...' : item.status.toUpperCase()}
+                                                                </Text>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            <Button
+                                                type="text"
+                                                className="!text-slate-500 hover:!text-slate-300 !mt-4"
+                                                onClick={() => {
+                                                    setIsKeyVerified(false);
+                                                    setBulkKey('');
+                                                }}
                                             >
-                                                →
-                                            </motion.span>
-                                        </span>
-                                    </Button>
+                                                Lock Session & Logout
+                                            </Button>
+                                        </motion.div>
+                                    )}
+                                </div>
+                            ) : (
+                                <Form
+                                    form={form}
+                                    layout="vertical"
+                                    onFinish={onFinish}
+                                    requiredMark={false}
+                                    className="relative z-10"
+                                >
+                                    {/* Personal Information Section */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="mb-10"
+                                    >
+                                        <div className="flex items-center gap-4 mb-8">
+                                            <div className="modern-icon-container">
+                                                <UserOutlined />
+                                            </div>
+                                            <div>
+                                                <h3 className="modern-section-header !text-xl !mb-0">Personal Information</h3>
+                                                <p className="modern-section-subtitle">Enter your basic details</p>
+                                            </div>
+                                        </div>
 
-                                    <Text className="text-slate-500 text-xs text-center block mt-4">
-                                        🔒 Your information is secure and will only be shared with the hiring team
-                                    </Text>
-                                </motion.div>
-                            </Form>
-                        )}
-                    </Card>
-                    <ToastContainer theme="dark" position="bottom-right" />
-                </motion.div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 modern-card-section">
+                                            <Form.Item
+                                                name="studentName"
+                                                label={<span className="modern-label">Full Legal Name</span>}
+                                                rules={[{ required: true, message: 'Please enter your full name' }]}
+                                            >
+                                                <Input
+                                                    prefix={<UserOutlined className="text-blue-600 mr-2" />}
+                                                    placeholder="e.g. Rahul Sharma"
+                                                    className="modern-input"
+                                                />
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                name="email"
+                                                label={<span className="modern-label">University Email</span>}
+                                                rules={[
+                                                    { required: true, message: 'Please enter your email' },
+                                                    { type: 'email', message: 'Please enter a valid email' }
+                                                ]}
+                                            >
+                                                <Input
+                                                    prefix={<MailOutlined className="text-blue-600 mr-2" />}
+                                                    placeholder="rahul@college.edu"
+                                                    className="modern-input"
+                                                />
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                name="phone"
+                                                label={<span className="modern-label">Mobile Number</span>}
+                                                rules={[{ required: true, message: 'Please enter your phone number' }]}
+                                            >
+                                                <Input
+                                                    prefix={<PhoneOutlined className="text-blue-600 mr-2" />}
+                                                    placeholder="+91 98765-43210"
+                                                    className="modern-input"
+                                                />
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                name="rollNumber"
+                                                label={<span className="modern-label">Roll Number / Student ID</span>}
+                                            >
+                                                <Input
+                                                    prefix={<IdcardOutlined className="text-blue-600 mr-2" />}
+                                                    placeholder="CS-2024-512"
+                                                    className="modern-input"
+                                                />
+                                            </Form.Item>
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Resume Upload Section */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 }}
+                                        className="mb-10"
+                                    >
+                                        <div className="flex items-center gap-4 mb-8">
+                                            <div className="modern-icon-container" style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)' }}>
+                                                <FileTextOutlined />
+                                            </div>
+                                            <div>
+                                                <h3 className="modern-section-header !text-xl !mb-0">Resume / CV</h3>
+                                                <p className="modern-section-subtitle">Choose how you want to submit your resume</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Toggle Buttons */}
+                                        <div className="flex gap-4 mb-8 p-2 bg-gray-100 rounded-2xl w-fit">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setSubmissionType('link');
+                                                    setCvFile(null);
+                                                }}
+                                                className={`modern-toggle-button ${submissionType === 'link' ? 'active' : ''}`}
+                                            >
+                                                <LinkOutlined className="mr-2" />
+                                                Drive Link
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setSubmissionType('file');
+                                                    form.setFieldsValue({ resumeUrl: undefined });
+                                                }}
+                                                className={`modern-toggle-button ${submissionType === 'file' ? 'active' : ''}`}
+                                            >
+                                                <CloudUploadOutlined className="mr-2" />
+                                                Upload File
+                                            </button>
+                                        </div>
+
+                                        {/* Content Based on Selection */}
+                                        <AnimatePresence mode="wait">
+                                            {submissionType === 'link' ? (
+                                                <motion.div
+                                                    key="link"
+                                                    initial={{ opacity: 0, x: -20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: 20 }}
+                                                    transition={{ duration: 0.2 }}
+                                                >
+                                                    <Form.Item
+                                                        name="resumeUrl"
+                                                        rules={[
+                                                            { required: submissionType === 'link', message: 'Please enter your resume link' },
+                                                            { type: 'url', message: 'Please enter a valid URL' }
+                                                        ]}
+                                                    >
+                                                        <div className="p-8 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                                                            <label className="modern-label !mb-4">Resume Drive Link</label>
+                                                            <Input
+                                                                prefix={<LinkOutlined className="text-blue-600 mr-2" />}
+                                                                placeholder="https://drive.google.com/your-resume-link"
+                                                                className="modern-input"
+                                                            />
+                                                            <p className="text-blue-700 text-sm font-black mt-4 flex items-center gap-2 italic">
+                                                                <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></span>
+                                                                💡 Make sure your link is publicly accessible
+                                                            </p>
+                                                        </div>
+                                                    </Form.Item>
+                                                </motion.div>
+                                            ) : (
+                                                <motion.div
+                                                    key="file"
+                                                    initial={{ opacity: 0, x: 20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: -20 }}
+                                                    transition={{ duration: 0.2 }}
+                                                >
+                                                    <DragDropUploader
+                                                        cvFile={cvFile}
+                                                        cvUploading={cvUploading}
+                                                        studentCvInputRef={studentCvInputRef}
+                                                        handleStudentCvUpload={handleStudentCvUpload}
+                                                        setCvFile={setCvFile}
+                                                    />
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </motion.div>
+
+                                    {/* Submit Button */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.2 }}
+                                    >
+                                        <Divider className="!border-gray-200 my-8" />
+
+                                        <Button
+                                            type="primary"
+                                            htmlType="submit"
+                                            loading={submitting}
+                                            disabled={submissionType === 'file' && !cvFile}
+                                            block
+                                            className="modern-submit-button group relative overflow-hidden"
+                                        >
+                                            <span className="relative flex items-center justify-center gap-3">
+                                                <SendOutlined className="text-xl group-hover:rotate-12 transition-transform" />
+                                                Submit Application
+                                            </span>
+                                        </Button>
+
+                                        <Text className="text-gray-900 font-bold text-xs text-center block mt-4 uppercase tracking-tight">
+                                            🔒 Your information is secure and will only be shared with the hiring team
+                                        </Text>
+                                    </motion.div>
+                                </Form>
+                            )}
+                        </Card>
+                        <ToastContainer theme="light" position="bottom-right" />
+                    </motion.div>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
 export default ApplyJob;
+

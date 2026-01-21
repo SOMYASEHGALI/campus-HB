@@ -1,0 +1,13 @@
+                                    </motion.div>
+                                </Form>
+                            )}
+                        </Card>
+                        <ToastContainer theme="dark" position="bottom-right" />
+                    </motion.div>
+                </div>
+            </div>
+        </>
+    );
+};
+
+export default ApplyJob;
